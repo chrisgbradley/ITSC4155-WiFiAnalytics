@@ -1,1 +1,8 @@
-# ITSC4155-WiFiAnalytics
+# NinerFi Analytics
+
+## Overview
+
+## How To Use
+
+---
+## The Team
