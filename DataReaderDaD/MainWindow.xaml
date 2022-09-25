@@ -1,0 +1,19 @@
+﻿<Window x:Name="MainWindow1" x:Class="DataReaderDaD.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DataReaderDaD"
+        mc:Ignorable="d"
+        Title="Drag and Drop" Height="450" Width="800" Background="#FF64695F" DragEnter="MainWindow1_DragEnter" Drop="MainWindow1_Drop" AllowDrop="True">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="101*"/>
+            <ColumnDefinition Width="59*"/>
+        </Grid.ColumnDefinitions>
+        <Label Content="Label" Margin="170,54,335,380"/>
+        <Label x:Name="TitleLabel" Content="NinerFi Analytics" Margin="222,54,-95,290" FontSize="36" FontWeight="Bold" FontFamily="Limelight"/>
+        <ListBox x:Name="DragDrobListbox" d:ItemsSource="{d:SampleData ItemCount=5}" Height="144" Margin="108,217,108,73" Grid.ColumnSpan="2" d:LayoutOverrides="VerticalAlignment"/>
+
+    </Grid>
+</Window>
