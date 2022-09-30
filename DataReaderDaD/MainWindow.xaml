@@ -5,15 +5,90 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DataReaderDaD"
         mc:Ignorable="d"
-        Title="Drag and Drop" Height="450" Width="800" Background="#FF64695F" DragEnter="MainWindow1_DragEnter" Drop="MainWindow1_Drop" AllowDrop="True">
-    <Grid>
+        Title="NinerFi Analytics" Height="600" Width="800" Background="#FF64695F" DragEnter="MainWindow1_DragEnter" Drop="MainWindow1_Drop" AllowDrop="True" MinWidth="800" MinHeight="550" MaxWidth="800">
+    <Window.Resources>
+        <SolidColorBrush x:Key="ProgressBar.Progress" Color="#FF06B025"/>
+        <SolidColorBrush x:Key="ProgressBar.Background" Color="#FFE6E6E6"/>
+        <SolidColorBrush x:Key="ProgressBar.Border" Color="#FFBCBCBC"/>
+        <Style x:Key="ProgressBarStyle1" TargetType="{x:Type ProgressBar}">
+            <Setter Property="Foreground" Value="{StaticResource ProgressBar.Progress}"/>
+            <Setter Property="Background" Value="{StaticResource ProgressBar.Background}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource ProgressBar.Border}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ProgressBar}">
+                        <Grid x:Name="TemplateRoot">
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Determinate"/>
+                                    <VisualState x:Name="Indeterminate">
+                                        <Storyboard RepeatBehavior="Forever">
+                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="Animation" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)">
+                                                <EasingDoubleKeyFrame KeyTime="0" Value="0.25"/>
+                                                <EasingDoubleKeyFrame KeyTime="0:0:1" Value="0.25"/>
+                                                <EasingDoubleKeyFrame KeyTime="0:0:2" Value="0.25"/>
+                                            </DoubleAnimationUsingKeyFrames>
+                                            <PointAnimationUsingKeyFrames Storyboard.TargetName="Animation" Storyboard.TargetProperty="(UIElement.RenderTransformOrigin)">
+                                                <EasingPointKeyFrame KeyTime="0" Value="-0.5,0.5"/>
+                                                <EasingPointKeyFrame KeyTime="0:0:1" Value="0.5,0.5"/>
+                                                <EasingPointKeyFrame KeyTime="0:0:2" Value="1.5,0.5"/>
+                                            </PointAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="10"/>
+                            <Rectangle x:Name="PART_Track"/>
+                            <Grid x:Name="PART_Indicator" ClipToBounds="true" HorizontalAlignment="Left">
+                                <Rectangle x:Name="Indicator" Fill="{TemplateBinding Foreground}" RadiusX="10" RadiusY="10"/>
+                                <Rectangle x:Name="Animation" Fill="{TemplateBinding Foreground}" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
+                                    <Rectangle.RenderTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform/>
+                                            <SkewTransform/>
+                                            <RotateTransform/>
+                                            <TranslateTransform/>
+                                        </TransformGroup>
+                                    </Rectangle.RenderTransform>
+                                </Rectangle>
+                            </Grid>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="Orientation" Value="Vertical">
+                                <Setter Property="LayoutTransform" TargetName="TemplateRoot">
+                                    <Setter.Value>
+                                        <RotateTransform Angle="-90"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsIndeterminate" Value="true">
+                                <Setter Property="Visibility" TargetName="Indicator" Value="Collapsed"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Grid Background="White" HorizontalAlignment="Stretch" Height="NaN" Margin="0,0,0,0" VerticalAlignment="Stretch" Width="NaN">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70"/>
+            <RowDefinition/>
+            <RowDefinition Height="52"/>
+            <RowDefinition Height="32"/>
+            <RowDefinition Height="70.04"/>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="101*"/>
-            <ColumnDefinition Width="59*"/>
+            <ColumnDefinition Width="400"/>
+            <ColumnDefinition Width="400"/>
         </Grid.ColumnDefinitions>
-        <Label Content="Label" Margin="170,54,335,380"/>
-        <Label x:Name="TitleLabel" Content="NinerFi Analytics" Margin="222,54,-95,290" FontSize="36" FontWeight="Bold" FontFamily="Limelight"/>
-        <ListBox x:Name="DragDrobListbox" d:ItemsSource="{d:SampleData ItemCount=5}" Height="144" Margin="108,217,108,73" Grid.ColumnSpan="2" d:LayoutOverrides="VerticalAlignment"/>
-
+        <Label x:Name="TitleLabel" Content="NinerFi Analytics" Margin="41,13,10,13" FontSize="30" FontWeight="Bold" FontFamily="Limelight" Background="{x:Null}" Foreground="#FF015035" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+        <ListBox x:Name="FilesNamesDropped" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="41,10,41,10" Grid.ColumnSpan="2" Grid.Row="1" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Height="NaN" Width="NaN" BorderBrush="{x:Null}" Background="{x:Null}" MinHeight="250" MinWidth="250"/>
+        <Rectangle StrokeThickness="2" Margin="37,6,37,10" StrokeDashArray="4 4" RadiusX="10" RadiusY="10" Grid.ColumnSpan="2" Grid.Row="1" Panel.ZIndex="10" Stroke="#FF015035" MinWidth="250" MinHeight="250"/>
+        <ProgressBar Style="{DynamicResource ProgressBarStyle1}" x:Name="DataProcessingProgress" Margin="41,0,41,0" Grid.ColumnSpan="2" VerticalAlignment="Center" Height="25" Grid.Row="2" Foreground="#FF015035" BorderBrush="#FF015035" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Center" Width="NaN" Background="#FFA39665" BorderThickness="2,2,2,2"/>
+        <Label x:Name="OutputTextBox" Grid.Row="3" Grid.Column="1" Margin="0,0,41,0"/>
+        <Button x:Name="StartButton" Grid.Row="4" Margin="213,0,0,0" Grid.Column="1" Content="Start" Click="StartButton_Click" Foreground="White" Background="#FF015035" BorderBrush="#FFA39665" MinHeight="32" MaxHeight="32" MaxWidth="150" MinWidth="150" HorizontalAlignment="Left" VerticalAlignment="Center" Height="32" Width="150"/>
+        <Button x:Name="CancelButton" Grid.Row="4" Margin="37,0,0,0" Content="Cancel" Click="CancelButton_Click" Foreground="White" Background="#FF015035" BorderBrush="#FFA39665" MinHeight="32" MaxHeight="32" MaxWidth="150" MinWidth="150" HorizontalAlignment="Left" VerticalAlignment="Center" Height="32" Width="150"/>
     </Grid>
 </Window>
