@@ -16,6 +16,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Collections.ObjectModel;
 
 namespace DataReaderDaD
 {
@@ -32,6 +33,7 @@ namespace DataReaderDaD
                                         + @"<(?<TYPE>[a-zA-Z]+)>");
 
         private readonly BackgroundWorker backgroundWorker = new BackgroundWorker();
+        private ObservableCollection<FileInfo> Files = new ObservableCollection<FileInfo>(); // will update if changes
 
         private void InitializeBackgroundWorker()
         {
@@ -51,6 +53,8 @@ namespace DataReaderDaD
         {
             InitializeComponent();
             InitializeBackgroundWorker();// set BGworker config
+            FilesDataGrid.AutoGenerateColumns = false; // otherwise the datagrid will populate for all fields attached to the fileinfo object
+            FilesDataGrid.ItemsSource = Files; // set datacontext/binding for datagrid
         }
 
 
@@ -63,19 +67,22 @@ namespace DataReaderDaD
 
         private void MainWindow1_Drop(object sender, DragEventArgs e)
         {
-
             // dont allow drops while parsing
             if (backgroundWorker.IsBusy)
                 return;
 
             // file paths of files dropped in
-            string[] filesThatWereDropped = (string[])(e.Data.GetData(DataFormats.FileDrop));
+            string[] filesThatWereDropped = (string[])(e.Data.GetData(DataFormats.FileDrop, true));
 
             // add all paths to listbox in GUI
             foreach(string file in filesThatWereDropped)
-                FilesNamesDropped.Items.Add(file);
-
-
+            {
+                Debug.WriteLine(file);
+                if(!Files.Any(o => o.FullName == file))
+                {
+                    Files.Add(new FileInfo(file));
+                }
+            }
         }
 
 
@@ -86,11 +93,8 @@ namespace DataReaderDaD
             if (backgroundWorker.IsBusy)
                 return;
 
-            // get file paths from listbox in GUI
-            string[] filesThatWereDropped = FilesNamesDropped.Items.OfType<string>().ToArray();
-
             // start parsing
-            backgroundWorker.RunWorkerAsync(filesThatWereDropped);
+            backgroundWorker.RunWorkerAsync(Files);
 
             StartButton.IsEnabled = !backgroundWorker.IsBusy;//disable start button while parsing
             CancelButton.IsEnabled = backgroundWorker.IsBusy;//enable cancel button while parsing
@@ -111,24 +115,23 @@ namespace DataReaderDaD
             BackgroundWorker worker = sender as BackgroundWorker;
 
             // get file paths that were passed
-            string[] filesThatWereDropped = (string[])e.Argument;
+            List<FileInfo> filesThatWereDropped = new List<FileInfo>((IEnumerable<FileInfo>)e.Argument);
 
             
             ulong totalSizeInBytes = 0;
-            foreach (string file in filesThatWereDropped)
+            foreach (FileInfo file in filesThatWereDropped)
             {
-                FileInfo fileInfo = new FileInfo(file);
-                totalSizeInBytes += (ulong)fileInfo.Length;
+                totalSizeInBytes += (ulong)file.Length;
             }
 
             ulong bytesReadSoFar = 0;
             ulong bytesLastReportedAt = 0;
-            ulong reportIntervalInBytes = 8192;
+            ulong reportIntervalInBytes = 65536;
 
-            foreach (string file in filesThatWereDropped)
+            foreach (FileInfo file in filesThatWereDropped)
             {
                 // provides auto try catch block and inits reader for you
-                using (StreamReader reader = new StreamReader(file)) 
+                using (StreamReader reader = new StreamReader(file.FullName)) 
                 {
                     while (reader.Peek() >= 0) // until end of file
                     {
@@ -214,6 +217,16 @@ namespace DataReaderDaD
                              + " Type: " + type;
 
             return parsedLogLine;
+        }
+
+        private void RemoveButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (backgroundWorker.IsBusy)
+                return;
+            Button button = sender as Button;
+            FileInfo fileInfo = button.DataContext as FileInfo;
+
+            Files.Remove(fileInfo);
         }
     }
 }
