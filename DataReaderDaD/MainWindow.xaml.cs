@@ -17,6 +17,7 @@ using System.Text.RegularExpressions;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Collections.ObjectModel;
+using System.Threading;
 
 namespace DataReaderDaD
 {
@@ -38,7 +39,7 @@ namespace DataReaderDaD
         private void InitializeBackgroundWorker()
         {
             // Background Process
-            backgroundWorker.DoWork += BackgroundWorker_DoWork;
+            backgroundWorker.DoWork += ParallelizedBackgroundWorker_DoWork;
             backgroundWorker.RunWorkerCompleted += BackgroundWorker_RunWorkerCompleted;
 
             // Progress Reporting
@@ -126,12 +127,15 @@ namespace DataReaderDaD
 
             ulong bytesReadSoFar = 0;
             ulong bytesLastReportedAt = 0;
-            ulong reportIntervalInBytes = 65536;
+            ulong reportIntervalInBytes = 131072;
+            int linesCount = 0;
 
+            Stopwatch sw = Stopwatch.StartNew();
             foreach (FileInfo file in filesThatWereDropped)
             {
+                const Int32 BufferSize = 1024;
                 // provides auto try catch block and inits reader for you
-                using (StreamReader reader = new StreamReader(file.FullName)) 
+                using (StreamReader reader = new StreamReader(file.FullName, Encoding.UTF8, true, BufferSize))
                 {
                     while (reader.Peek() >= 0) // until end of file
                     {
@@ -145,17 +149,18 @@ namespace DataReaderDaD
 
                         // not sure if this is exactly correct because im lazy
                         // taking the character length of the string and converting to bytes
-                        bytesReadSoFar += (ulong) line.Length * sizeof(Char); 
+                        bytesReadSoFar += (ulong)Encoding.UTF8.GetByteCount(line + "\n");
+                        linesCount++;
 
                         Match match = regex.Match(line);
 
                         if (match.Success)
                         {
                             // @TODO: Remove this line. Only for debugging purposes. Replace with file write or database put
-                            Debug.WriteLine(parseMatch(match));
+                            //Debug.WriteLine(parseMatch(match));
 
                             // only report progress if reportInterval has been passed
-                            if(bytesReadSoFar - bytesLastReportedAt > reportIntervalInBytes)
+                            if (bytesReadSoFar - bytesLastReportedAt > reportIntervalInBytes)
                             {
                                 int percentageComplete = (int)((float)bytesReadSoFar / totalSizeInBytes * 100);
                                 string progressMessage = $"Read {bytesReadSoFar / 1024} KB of {totalSizeInBytes / 1024} KB";
@@ -166,6 +171,87 @@ namespace DataReaderDaD
                     }
                 }
             }
+
+            sw.Stop();
+
+            TimeSpan ts = sw.Elapsed;
+
+            Debug.WriteLine("\n\n-------------------------------------------------------------------------------------\n");
+            Debug.WriteLine("Elapsed Time is {0:00}:{1:00}:{2:00}.{3}", ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds);
+            Debug.WriteLine("\n-------------------------------------------------------------------------------------\n\n");
+        }
+
+
+        private void ParallelizedBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            // Do not access the form's BackgroundWorker reference directly.
+            // Instead, use the reference provided by the sender parameter.
+            BackgroundWorker worker = sender as BackgroundWorker;
+
+            // get file paths that were passed
+            List<FileInfo> filesThatWereDropped = new List<FileInfo>((IEnumerable<FileInfo>)e.Argument);
+
+
+            ulong totalSizeInBytes = 0;
+            foreach (FileInfo file in filesThatWereDropped)
+            {
+                totalSizeInBytes += (ulong)file.Length;
+            }
+
+            ulong bytesReadSoFar = 0;
+            ulong bytesLastReportedAt = 0;
+            ulong reportIntervalInBytes = 131072;
+            int linesCount = 0;
+
+            Stopwatch sw = Stopwatch.StartNew();
+            Parallel.ForEach(filesThatWereDropped, new ParallelOptions { MaxDegreeOfParallelism = 4 }, file =>
+            {
+                const Int32 BufferSize = 1024;
+                // provides auto try catch block and inits reader for you
+                using (StreamReader reader = new StreamReader(file.FullName, Encoding.UTF8, true, BufferSize))
+                {
+                    while (reader.Peek() >= 0) // until end of file
+                    {
+                        if (worker.CancellationPending)
+                        {
+                            e.Cancel = true;
+                            break;
+                        }
+
+                        string line = reader.ReadLine();
+
+                        // not sure if this is exactly correct because im lazy
+                        // taking the character length of the string and converting to bytes
+                        bytesReadSoFar += (ulong)Encoding.UTF8.GetByteCount(line + "\n");
+                        linesCount++;
+
+                        Match match = regex.Match(line);
+
+                        if (match.Success)
+                        {
+                            // @TODO: Remove this line. Only for debugging purposes. Replace with file write or database put
+                            //Debug.WriteLine(parseMatch(match));
+
+                            // only report progress if reportInterval has been passed
+                            if (bytesReadSoFar - bytesLastReportedAt > reportIntervalInBytes)
+                            {
+                                int percentageComplete = (int)((float)bytesReadSoFar / totalSizeInBytes * 100);
+                                string progressMessage = $"Read {bytesReadSoFar / 1024} KB of {totalSizeInBytes / 1024} KB";
+                                worker.ReportProgress(percentageComplete, progressMessage);
+                                bytesLastReportedAt = bytesReadSoFar; // reset report interval
+                            }
+                        }
+                    }
+                }
+            });
+
+            sw.Stop();
+
+            TimeSpan ts = sw.Elapsed;
+
+            Debug.WriteLine("\n\n-------------------------------------------------------------------------------------\n");
+            Debug.WriteLine("Elapsed Time is {0:00}:{1:00}:{2:00}.{3}", ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds);
+            Debug.WriteLine("\n-------------------------------------------------------------------------------------\n\n");
         }
 
 
