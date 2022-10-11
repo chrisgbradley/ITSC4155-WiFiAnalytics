@@ -9,8 +9,8 @@ namespace DataReader
         static void Main(string[] args)
         {
             //const string FILENAME = "wifi_data.log";
-            const string FILENAME = "wireless_01-01-2021.log";
-            const string FILENAME2 = "filtered2.log";
+            const string FILENAME = "wireless_01-10-2021.log";
+            const string FILENAME2 = "filtered3.log";
             //const string FILENAME =
             //@"C:\Users\Will Robinson\Documents\UNCC\ITSC 4155\DataCollection\DataReader\DataReader\bin\Debug\net5.0\wifi_data.log";
 
@@ -35,27 +35,33 @@ namespace DataReader
                     Regex regex2 = new Regex(@"<(?<LOGCODE>5[0-9]{5})>");
                     Regex regex3 = new Regex(@"AP\s(?<AP>[EXT-]+[a-zA-z0-9]+|[a-zA-Z0-9]+)-");
 
+                    Regex regex4 = new Regex(@"(?<DATE>[a-zA-Z]+\s+(0?[1-9]|[12][0-9]|3[01]))\s+"
+                                          + @"(?<TIME>[0-9]{2}:[0-9]{2}:[0-9]{2})\s(?<HOST>\S+)\s+"
+                                          + @"(?<PROCNAME>[a-zA-Z0-9\-]+)\[(?<PID>[^\]]*)\]:\s+"
+                                          + @"<(?<LOGCODE>[0-9]{6})>\s+(?:<(\d*)>\s+)?"
+                                          + @"<(?<TYPE>[a-zA-Z]+)>\s+"
+                                          + @"\|AP\s(?<AP>[EXT-]+[a-zA-z0-9]+|[a-zA-Z0-9]+)-");
+
                     while ((line = reader.ReadLine()) != null)
                     {    
                         Match match = regex2.Match(line);
                         Match match2 = regex3.Match(line);
+                        Match match3 = regex4.Match(line);
 
-                        if (match2.Success)
+                        if (match3.Success)
                         {
                             /*
-                            string date = match.Groups["DATE"].Value;
-                            string time = match.Groups["TIME"].Value;
-                            string host = match.Groups["HOST"].Value;
-                            string procname = match.Groups["PROCNAME"].Value;
-                            int pid = Convert.ToInt32(match.Groups["PID"].Value);
-                            int logcode = Convert.ToInt32(match.Groups["LOGCODE"].Value);
-                            string type = match.Groups["TYPE"].Value;
+                            
+                            //Used for storing groups into variables.
+                            string date = match3.Groups["DATE"].Value;
+                            string time = match3.Groups["TIME"].Value;                            
+                            int logcode = Convert.ToInt32(match3.Groups["LOGCODE"].Value);
+                            string access_point = match3.Groups["AP"].Value;
 
                             string logLine = "Date: " + date + " Time: " + time +
-                                                     " Host: " + host + " Proc. Name: " + procname +
-                                                     " PID: " + pid + " Log Code: " + logcode + " Type: " + type;
+                                                     " Log Code: " + logcode + " Access Point: " + access_point;
 
-                            Console.WriteLine(logLine);
+                            writer.WriteLine(logLine);
                             */
                             writer.WriteLine(line);
                         }
