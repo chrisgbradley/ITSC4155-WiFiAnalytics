@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\emily\\ITSC4155-WiFiAnalytics\\NinerFiAnalytics\\NinerFiAnalytics\\NinerFiAnalytics.csproj": {}
+    "C:\\Users\\emily\\ITSC4155-WiFiAnalytics\\NinerFiAnalytics\\NinerFiAnalytics.csproj": {}
   },
   "projects": {
-    "C:\\Users\\emily\\ITSC4155-WiFiAnalytics\\NinerFiAnalytics\\NinerFiAnalytics\\NinerFiAnalytics.csproj": {
+    "C:\\Users\\emily\\ITSC4155-WiFiAnalytics\\NinerFiAnalytics\\NinerFiAnalytics.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\emily\\ITSC4155-WiFiAnalytics\\NinerFiAnalytics\\NinerFiAnalytics\\NinerFiAnalytics.csproj",
+        "projectUniqueName": "C:\\Users\\emily\\ITSC4155-WiFiAnalytics\\NinerFiAnalytics\\NinerFiAnalytics.csproj",
         "projectName": "NinerFiAnalytics",
-        "projectPath": "C:\\Users\\emily\\ITSC4155-WiFiAnalytics\\NinerFiAnalytics\\NinerFiAnalytics\\NinerFiAnalytics.csproj",
+        "projectPath": "C:\\Users\\emily\\ITSC4155-WiFiAnalytics\\NinerFiAnalytics\\NinerFiAnalytics.csproj",
         "packagesPath": "C:\\Users\\emily\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\emily\\ITSC4155-WiFiAnalytics\\NinerFiAnalytics\\NinerFiAnalytics\\obj\\",
+        "outputPath": "C:\\Users\\emily\\ITSC4155-WiFiAnalytics\\NinerFiAnalytics\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\emily\\AppData\\Roaming\\NuGet\\NuGet.Config",

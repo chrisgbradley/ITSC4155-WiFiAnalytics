@@ -1,0 +1,114 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 15px;
+    color: #015035;
+    position: relative;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+body {
+    font-family: bebas-neue, sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    min-height: 100vh;
+}
+
+header, header a, footer {
+    background-color: #015035;
+    color: #ffffff;
+}
+
+a {
+    text-decoration: none;
+}
+
+header {
+    padding: 2.5%;
+}
+
+header::after {
+    clear: both;
+}
+
+#logo {
+    float: left;
+    width: 5%;
+}
+
+#nav-title {
+    float: left;
+    padding: 0 1%;
+}
+
+#nav-items {
+    list-style: none;
+    float: right;
+    margin-right: 15%;
+    white-space: nowrap;
+}
+
+#nav-items li {
+    display: inline-block;
+    margin-left: 15%;
+}
+
+#nav-items a:hover {
+    background-color: #022d1e;
+}
+
+.background-image {
+    text-align: center;
+    min-height: 100vh;
+    background-image: url("/images/uncc-background.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    backdrop-filter: blur(2px);
+}
+
+#wifi {
+    width: 20%;
+}
+
+form {
+    padding: 3%;
+}
+
+#overview-text {
+    background-color: #015035;
+    color: #ffffff;
+    width: 40%;
+    padding: 2% 3%;
+    display: inline-block;
+    margin-right: 15%;
+}
+
+#overview-text h2, #overview-text p {
+    text-align: left;
+    padding: 2% 0;
+}
+
+.content {
+    padding: 5% 10%;
+}
+
+.content h3, .content p {
+    padding: 2% 2% .5%;
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    padding: .5%;
+}
