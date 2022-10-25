@@ -158,15 +158,15 @@ namespace DataReaderDaD
                         {
                             // @TODO: Remove this line. Only for debugging purposes. Replace with file write or database put
                             //Debug.WriteLine(parseMatch(match));
+                        }
 
-                            // only report progress if reportInterval has been passed
-                            if (bytesReadSoFar - bytesLastReportedAt > reportIntervalInBytes)
-                            {
-                                int percentageComplete = (int)((float)bytesReadSoFar / totalSizeInBytes * 100);
-                                string progressMessage = $"Read {bytesReadSoFar / 1024} KB of {totalSizeInBytes / 1024} KB";
-                                worker.ReportProgress(percentageComplete, progressMessage);
-                                bytesLastReportedAt = bytesReadSoFar; // reset report interval
-                            }
+                        // only report progress if reportInterval has been passed
+                        if (bytesReadSoFar - bytesLastReportedAt > reportIntervalInBytes)
+                        {
+                            int percentageComplete = (int)((float)bytesReadSoFar / totalSizeInBytes * 100);
+                            string progressMessage = $"Read {bytesReadSoFar / 1024} KB of {totalSizeInBytes / 1024} KB";
+                            worker.ReportProgress(percentageComplete, progressMessage);
+                            bytesLastReportedAt = bytesReadSoFar; // reset report interval
                         }
                     }
                 }
@@ -231,15 +231,15 @@ namespace DataReaderDaD
                         {
                             // @TODO: Remove this line. Only for debugging purposes. Replace with file write or database put
                             //Debug.WriteLine(parseMatch(match));
+                        }
 
-                            // only report progress if reportInterval has been passed
-                            if (bytesReadSoFar - bytesLastReportedAt > reportIntervalInBytes)
-                            {
-                                int percentageComplete = (int)((float)bytesReadSoFar / totalSizeInBytes * 100);
-                                string progressMessage = $"Read {bytesReadSoFar / 1024} KB of {totalSizeInBytes / 1024} KB";
-                                worker.ReportProgress(percentageComplete, progressMessage);
-                                bytesLastReportedAt = bytesReadSoFar; // reset report interval
-                            }
+                        // only report progress if reportInterval has been passed
+                        if (bytesReadSoFar - bytesLastReportedAt > reportIntervalInBytes)
+                        {
+                            int percentageComplete = (int)((float)bytesReadSoFar / totalSizeInBytes * 100);
+                            string progressMessage = $"Read {bytesReadSoFar / 1024} KB of {totalSizeInBytes / 1024} KB";
+                            worker.ReportProgress(percentageComplete, progressMessage);
+                            bytesLastReportedAt = bytesReadSoFar; // reset report interval
                         }
                     }
                 }
