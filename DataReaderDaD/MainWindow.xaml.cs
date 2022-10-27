@@ -18,6 +18,9 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Collections.ObjectModel;
 using System.Threading;
+using System.Data.OleDb;
+using System.Windows.Markup;
+using System.Globalization;
 
 namespace DataReaderDaD
 {
@@ -27,12 +30,21 @@ namespace DataReaderDaD
     public partial class MainWindow : Window
     {
 
-        private readonly Regex regex = new Regex(@"(?<DATE>[a-zA-Z]+\s+(0?[1-9]|[12][0-9]|3[01]))\s+"
-                                        + @"(?<TIME>[0-9]{2}:[0-9]{2}:[0-9]{2})\s(?<HOST>\S+)\s+"
+        private readonly Regex lineRegex = new Regex(@"(?<DATE>(?<MONTH>[a-zA-Z]+)\s+(?<DAY>0?[1-9]|[12][0-9]|3[01]))\s+"
+                                        + @"(?<TIME>(?<HOUR>[0-9]{2}):(?<MINUTE>[0-9]{2}):(?<SECOND>[0-9]{2}))\s(?<HOST>\S+)\s+"
                                         + @"(?<PROCNAME>[a-zA-Z0-9\-]+)\[(?<PID>[^\]]*)\]:\s+"
                                         + @"<(?<LOGCODE>[0-9]{6})>\s+(?:<(\d*)>\s+)?"
                                         + @"<(?<TYPE>[a-zA-Z]+)>");
 
+        private readonly Regex yearRegex = new Regex(@".\d{2}-\d{2}-(?<YEAR>\d{4}).");
+        
+        /* 
+         * Connection String
+         * Data Source = WINSVR2019; Initial Catalog = NINERFISTAGING; Integrated Security = True
+         */
+
+        //  @"(?<TIME>(?<HOUR>[0-9]{2}):(?<MINUTE>[0-9]{2}):(?<SECOND>[0-9]{2}))\s(?<HOST>\S+)\s+"
+        //  @".\d{2}-\d{2}-(?<YEAR>\d{4})."
         private readonly BackgroundWorker backgroundWorker = new BackgroundWorker();
         private ObservableCollection<FileInfo> Files = new ObservableCollection<FileInfo>(); // will update if changes
 
@@ -152,7 +164,7 @@ namespace DataReaderDaD
                         bytesReadSoFar += (ulong)Encoding.UTF8.GetByteCount(line + "\n");
                         linesCount++;
 
-                        Match match = regex.Match(line);
+                        Match match = lineRegex.Match(line);
 
                         if (match.Success)
                         {
@@ -208,8 +220,23 @@ namespace DataReaderDaD
             {
                 const Int32 BufferSize = 1024;
                 // provides auto try catch block and inits reader for you
+                /*
+                string destinationDirectory = "C:\\Users\\willr\\Documents\\CSV";  //  Comment this out when done.
+
+                if (!Directory.Exists(destinationDirectory)) //  Comment this out when done.
+                    Directory.CreateDirectory(destinationDirectory); //  Comment this out when done.
+                
+                //  Comment this out when done.
+                using (StreamWriter writer = new StreamWriter(System.IO.Path.ChangeExtension(System.IO.Path.Combine(destinationDirectory, System.IO.Path.GetFileName(file.Name)), ".csv"), true, Encoding.UTF8))*/
+                Match yearMatch = yearRegex.Match(file.FullName);
+                int year = yearMatch.Success == true ? Convert.ToInt32(yearMatch.Groups["YEAR"].Value) : 9999;
+
                 using (StreamReader reader = new StreamReader(file.FullName, Encoding.UTF8, true, BufferSize))
                 {
+                    //writer.WriteLine("\"HOST\"");
+                    
+
+
                     while (reader.Peek() >= 0) // until end of file
                     {
                         if (worker.CancellationPending)
@@ -225,12 +252,33 @@ namespace DataReaderDaD
                         bytesReadSoFar += (ulong)Encoding.UTF8.GetByteCount(line + "\n");
                         linesCount++;
 
-                        Match match = regex.Match(line);
+                        Match lineMatch = lineRegex.Match(line);
+                        
 
-                        if (match.Success)
+                        if (lineMatch.Success)
                         {
                             // @TODO: Remove this line. Only for debugging purposes. Replace with file write or database put
                             //Debug.WriteLine(parseMatch(match));
+                            //writer.WriteLine(match.Groups["HOST"].Value); // Comment this out when done.
+                            string month = lineMatch.Groups["MONTH"].Value;
+                            int day = Convert.ToInt32(lineMatch.Groups["DAY"].Value);
+                            string time = lineMatch.Groups["TIME"].Value;
+                            int hour = Convert.ToInt32(lineMatch.Groups["HOUR"].Value);
+                            int minute = Convert.ToInt32(lineMatch.Groups["MINUTE"].Value);
+                            int second = Convert.ToInt32(lineMatch.Groups["SECOND"].Value);
+                            string host = lineMatch.Groups["HOST"].Value;
+                            string procname = lineMatch.Groups["PROCNAME"].Value;
+                            int pid = Convert.ToInt32(lineMatch.Groups["PID"].Value);
+                            int logcode = Convert.ToInt32(lineMatch.Groups["LOGCODE"].Value);
+                            string type = lineMatch.Groups["TYPE"].Value;
+
+                            //string dateString = date + year + time;
+
+                            DateTime fullDate = new DateTime(year, DateTime.ParseExact(month, "MMM", CultureInfo.CurrentCulture).Month, day, hour, minute, second);
+
+                            addToDatabase(fullDate, host, procname, pid, logcode, type);
+
+
                         }
 
                         // only report progress if reportInterval has been passed
@@ -303,6 +351,39 @@ namespace DataReaderDaD
                              + " Type: " + type;
 
             return parsedLogLine;
+        }
+
+        private void addToDatabase(DateTime date, string hostname, string procname, int pid, int log, string entrytype) 
+        {
+            string connString;
+            string oleDBInsert;
+
+            // Data Source=WINSVR2019;Initial Catalog=NINERFISTAGING;Integrated Security=True
+            connString = @"Provider=SQLOLEDB;Data Source=WINSVR2019; Initial Catalog=NINERFISTAGING; Integrated Security=SSPI";
+            oleDBInsert = "INSERT INTO STAGING(EntryTimestamp, Hostname, ProcessName, ProcessNumber, LogCode, Description,EntryTypeName) " +
+                        "VALUES('" + date + "', '" + hostname + "', '" + procname + "', '" + pid + "', '" + log + "', NULL, '" + entrytype + "')";
+
+            OleDbConnection conn = new OleDbConnection(connString);
+            OleDbCommand cmd = new OleDbCommand(oleDBInsert, conn);
+            
+            try
+            {
+                conn.Open();
+                cmd.ExecuteNonQuery();
+
+                
+
+            }
+            catch (OleDbException ex)
+            {
+                MessageBox.Show(ex.Message + ex.StackTrace, "Exception Details");
+            }
+            finally
+            {
+                //MessageBox.Show("Successfully added to database!", "Success");
+                conn.Close();
+            }
+                                      
         }
 
         private void RemoveButton_Click(object sender, RoutedEventArgs e)
