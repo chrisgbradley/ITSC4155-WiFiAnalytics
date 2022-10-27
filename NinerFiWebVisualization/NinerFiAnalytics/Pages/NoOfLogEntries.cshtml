@@ -1,0 +1,10 @@
+﻿@page
+@model NinerFiAnalytics.Pages.NoOfLogEntriesModel
+@{
+    ViewData["Title"] = "NoOfLogEntries";
+}
+
+<h2>Number of Logs by Time Chart</h2>
+<canvas id="logsChart" aria-label="Number of Logs by Minute" role="img"></canvas>
+
+<script src="~/js/logChart.js" asp-append-version="true"></script> 

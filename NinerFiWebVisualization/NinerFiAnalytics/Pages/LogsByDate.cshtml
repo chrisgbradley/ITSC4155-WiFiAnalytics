@@ -1,0 +1,55 @@
+﻿@page
+@model NinerFiAnalytics.Pages.LogsByDateModel
+@{
+    ViewData["Title"] = "LogsByDate";
+}
+
+<h2>Number of Logs @ViewData["dateselected"]</h2>
+
+<!-- Form to choose day/hour/minute to focus on-->
+<form method="post">
+    <div class="form-inline">
+        <label for="year">Year</label>
+        <select id="year" asp-for="Year" class="form-control" aria-describedby="year">
+            <option selected>2021</option>
+        </select>
+
+        <label for="month">Month</label>
+        <select id="month" asp-for="Month" class="form-control" aria-describedby="month">
+            <option selected>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+            <option>6</option>
+            <option>7</option>
+            <option>8</option>
+            <option>9</option>
+            <option>10</option>
+            <option>11</option>
+            <option>12</option>
+        </select>
+
+        <label for="day">Day</label>
+        <select id="day" asp-for="Day" class="form-control" aria-describedby="day">
+            <option selected>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+            <option>6</option>
+            <option>7</option>
+            <option>8</option>
+            <option>9</option>
+            <option>10</option>
+            <option>11</option>
+            <option>12</option>
+        </select>
+
+        <button type="submit" asp-page-handler="Submit" class="btn btn-primary">Submit</button>
+    </div>
+</form>
+
+<canvas id="testChart" aria-label="Test - No of Logs by Time" role="img"></canvas>
+
+<script src="~/js/dateChart.js" asp-append-version="true"></script> 

@@ -1,0 +1,21 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+/*ANNOYING NO STICKY SOLUTION*/
+main {
+    margin-top: 55px;
+}
+
+.background {
+    background: url("/images/campus.jpg");
+    min-height: 100vh;
+    background-size: cover;
+    background-repeat: no-repeat;
+}

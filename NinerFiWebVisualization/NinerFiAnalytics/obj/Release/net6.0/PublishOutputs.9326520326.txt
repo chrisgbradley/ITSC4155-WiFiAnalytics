@@ -1,0 +1,7 @@
+C:\Users\RNAB\source\repos\NinerFiWebVisualization\NinerFiAnalytics\obj\Release\net6.0\PubTmp\Out\NinerFiAnalytics.exe
+C:\Users\RNAB\source\repos\NinerFiWebVisualization\NinerFiAnalytics\obj\Release\net6.0\PubTmp\Out\appsettings.Development.json
+C:\Users\RNAB\source\repos\NinerFiWebVisualization\NinerFiAnalytics\obj\Release\net6.0\PubTmp\Out\appsettings.json
+C:\Users\RNAB\source\repos\NinerFiWebVisualization\NinerFiAnalytics\obj\Release\net6.0\PubTmp\Out\NinerFiAnalytics.dll
+C:\Users\RNAB\source\repos\NinerFiWebVisualization\NinerFiAnalytics\obj\Release\net6.0\PubTmp\Out\NinerFiAnalytics.deps.json
+C:\Users\RNAB\source\repos\NinerFiWebVisualization\NinerFiAnalytics\obj\Release\net6.0\PubTmp\Out\NinerFiAnalytics.runtimeconfig.json
+C:\Users\RNAB\source\repos\NinerFiWebVisualization\NinerFiAnalytics\obj\Release\net6.0\PubTmp\Out\NinerFiAnalytics.pdb
