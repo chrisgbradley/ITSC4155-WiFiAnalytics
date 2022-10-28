@@ -75,6 +75,7 @@ namespace DataReaderDaD
         {
             // Used to prime the window for dragging and dropping.
             e.Effects = DragDropEffects.All;
+            OutputTextBox.Content = string.Empty;
         }
 
 
@@ -87,13 +88,25 @@ namespace DataReaderDaD
             // file paths of files dropped in
             string[] filesThatWereDropped = (string[])(e.Data.GetData(DataFormats.FileDrop, true));
 
+            string logExtension = ".log";
+
             // add all paths to listbox in GUI
-            foreach(string file in filesThatWereDropped)
+            // checks file extension and removes files that are not .log extension
+            foreach (string file in filesThatWereDropped)
             {
+                FileInfo nFile = new FileInfo(file);
+
                 Debug.WriteLine(file);
-                if(!Files.Any(o => o.FullName == file))
+                if (!Files.Any(o => o.FullName == file))
                 {
-                    Files.Add(new FileInfo(file));
+                    Files.Add(nFile);
+                }
+
+
+                if (!file.EndsWith(logExtension))
+                {
+                    Files.Remove(nFile);
+                    OutputTextBox.Content = "An invalid filetype was dropped and will not be uploaded";
                 }
             }
         }
