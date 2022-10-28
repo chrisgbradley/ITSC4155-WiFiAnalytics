@@ -233,9 +233,7 @@ namespace DataReaderDaD
 
                 using (StreamReader reader = new StreamReader(file.FullName, Encoding.UTF8, true, BufferSize))
                 {
-                    //writer.WriteLine("\"HOST\"");
-                    
-
+                    List<LogEntry> lines = new List<LogEntry>();
 
                     while (reader.Peek() >= 0) // until end of file
                     {
@@ -257,8 +255,6 @@ namespace DataReaderDaD
 
                         if (lineMatch.Success)
                         {
-                            // @TODO: Remove this line. Only for debugging purposes. Replace with file write or database put
-                            //Debug.WriteLine(parseMatch(match));
                             //writer.WriteLine(match.Groups["HOST"].Value); // Comment this out when done.
                             string month = lineMatch.Groups["MONTH"].Value;
                             int day = Convert.ToInt32(lineMatch.Groups["DAY"].Value);
@@ -272,13 +268,11 @@ namespace DataReaderDaD
                             int logcode = Convert.ToInt32(lineMatch.Groups["LOGCODE"].Value);
                             string type = lineMatch.Groups["TYPE"].Value;
 
-                            //string dateString = date + year + time;
-
                             DateTime fullDate = new DateTime(year, DateTime.ParseExact(month, "MMM", CultureInfo.CurrentCulture).Month, day, hour, minute, second);
 
-                            addToDatabase(fullDate, host, procname, pid, logcode, type);
+                            LogEntry entry = new LogEntry(fullDate, host, procname, pid, logcode, type);
 
-
+                            lines.Add(entry);
                         }
 
                         // only report progress if reportInterval has been passed
@@ -288,6 +282,11 @@ namespace DataReaderDaD
                             string progressMessage = $"Read {bytesReadSoFar / 1024} KB of {totalSizeInBytes / 1024} KB";
                             worker.ReportProgress(percentageComplete, progressMessage);
                             bytesLastReportedAt = bytesReadSoFar; // reset report interval
+                        }
+                        if (lines.Count >= 50000)
+                        {
+                            addToDatabase(lines);
+                            lines.Clear();
                         }
                     }
                 }
@@ -353,26 +352,55 @@ namespace DataReaderDaD
             return parsedLogLine;
         }
 
-        private void addToDatabase(DateTime date, string hostname, string procname, int pid, int log, string entrytype) 
+        private void addToDatabase(List<LogEntry> lines) 
         {
             string connString;
-            string oleDBInsert;
 
             // Data Source=WINSVR2019;Initial Catalog=NINERFISTAGING;Integrated Security=True
             connString = @"Provider=SQLOLEDB;Data Source=WINSVR2019; Initial Catalog=NINERFISTAGING; Integrated Security=SSPI";
-            oleDBInsert = "INSERT INTO STAGING(EntryTimestamp, Hostname, ProcessName, ProcessNumber, LogCode, Description,EntryTypeName) " +
-                        "VALUES('" + date + "', '" + hostname + "', '" + procname + "', '" + pid + "', '" + log + "', NULL, '" + entrytype + "')";
+            //oleDBInsert = "INSERT INTO STAGING(EntryTimestamp, Hostname, ProcessName, ProcessNumber, LogCode, Description,EntryTypeName) " +
+            //            "VALUES('" + date + "', '" + hostname + "', '" + procname + "', '" + pid + "', '" + log + "', NULL, '" + entrytype + "')";
+
+
+            //string commandText = "INSERT INTO STAGING(EntryTimestamp, Hostname, ProcessName, ProcessNumber, LogCode, Description, EntryTypeName) " +
+            //            "VALUES(@date, @hostname, @procname, @pid, @log, NULL, @entrytype)";
+
+            string commandText = "INSERT INTO STAGING(EntryTimestamp, Hostname, ProcessName, ProcessNumber, LogCode, Description, EntryTypeName) " +
+                        "VALUES(?, ?, ?, ?, ?, NULL, ?)";
+
+
+
+
 
             OleDbConnection conn = new OleDbConnection(connString);
-            OleDbCommand cmd = new OleDbCommand(oleDBInsert, conn);
+            OleDbCommand cmd = conn.CreateCommand();
             
             try
             {
                 conn.Open();
-                cmd.ExecuteNonQuery();
+                cmd.CommandText = commandText;
+                cmd.Parameters.AddRange(new OleDbParameter[]
+                {
+                    new OleDbParameter("@date", new DateTime()),
+                    new OleDbParameter("@hostname", "DEFAULT_HOSTNAME_ERROR"),
+                    new OleDbParameter("@procname", "DEFAULT_PROCNAME_ERROR"),
+                    new OleDbParameter("@pid", int.MaxValue),
+                    new OleDbParameter("@log", int.MaxValue),
+                    new OleDbParameter("@entrytype", "DEFAULT_ENTRYTYPE_ERROR"),
 
-                
+                });
+                foreach( var line in lines )
+                {
+                    cmd.Parameters[0].Value = line.date;
+                    cmd.Parameters[1].Value = line.hostname;
+                    cmd.Parameters[2].Value = line.procname;
+                    cmd.Parameters[3].Value = line.pid;
+                    cmd.Parameters[4].Value = line.log;
+                    cmd.Parameters[5].Value = line.entrytype;
 
+
+                    cmd.ExecuteNonQuery();
+                }
             }
             catch (OleDbException ex)
             {
@@ -380,10 +408,9 @@ namespace DataReaderDaD
             }
             finally
             {
-                //MessageBox.Show("Successfully added to database!", "Success");
+                MessageBox.Show("Successfully added to database!", "Success");
                 conn.Close();
             }
-                                      
         }
 
         private void RemoveButton_Click(object sender, RoutedEventArgs e)
@@ -394,6 +421,26 @@ namespace DataReaderDaD
             FileInfo fileInfo = button.DataContext as FileInfo;
 
             Files.Remove(fileInfo);
+        }
+
+        struct LogEntry
+        {
+            public DateTime date;
+            public string hostname;
+            public string procname;
+            public int pid;
+            public int log;
+            public string entrytype;
+
+            public LogEntry(DateTime date, string hostname, string procname, int pid, int log, string entrytype)
+            {
+                this.date = date;
+                this.hostname = hostname;
+                this.procname = procname;
+                this.pid = pid;
+                this.log = log;
+                this.entrytype = entrytype;
+            }
         }
     }
 }
