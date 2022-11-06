@@ -21,6 +21,9 @@ using System.Threading;
 using System.Data.OleDb;
 using System.Windows.Markup;
 using System.Globalization;
+using System.Collections.Concurrent;
+using FastMember;
+using System.Data.SqlClient;
 
 namespace DataReaderDaD
 {
@@ -37,7 +40,9 @@ namespace DataReaderDaD
                                         + @"<(?<TYPE>[a-zA-Z]+)>");
 
         private readonly Regex yearRegex = new Regex(@".\d{2}-\d{2}-(?<YEAR>\d{4}).");
-        
+
+        private readonly int BULKCOPY_THRESHOLD = 50000;
+
         /* 
          * Connection String
          * Data Source = WINSVR2019; Initial Catalog = NINERFISTAGING; Integrated Security = True
@@ -134,79 +139,6 @@ namespace DataReaderDaD
         }
 
 
-        private void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
-        {
-            // Do not access the form's BackgroundWorker reference directly.
-            // Instead, use the reference provided by the sender parameter.
-            BackgroundWorker worker = sender as BackgroundWorker;
-
-            // get file paths that were passed
-            List<FileInfo> filesThatWereDropped = new List<FileInfo>((IEnumerable<FileInfo>)e.Argument);
-
-            
-            ulong totalSizeInBytes = 0;
-            foreach (FileInfo file in filesThatWereDropped)
-            {
-                totalSizeInBytes += (ulong)file.Length;
-            }
-
-            ulong bytesReadSoFar = 0;
-            ulong bytesLastReportedAt = 0;
-            ulong reportIntervalInBytes = 131072;
-            int linesCount = 0;
-
-            Stopwatch sw = Stopwatch.StartNew();
-            foreach (FileInfo file in filesThatWereDropped)
-            {
-                const Int32 BufferSize = 1024;
-                // provides auto try catch block and inits reader for you
-                using (StreamReader reader = new StreamReader(file.FullName, Encoding.UTF8, true, BufferSize))
-                {
-                    while (reader.Peek() >= 0) // until end of file
-                    {
-                        if (worker.CancellationPending)
-                        {
-                            e.Cancel = true;
-                            break;
-                        }
-
-                        string line = reader.ReadLine();
-
-                        // not sure if this is exactly correct because im lazy
-                        // taking the character length of the string and converting to bytes
-                        bytesReadSoFar += (ulong)Encoding.UTF8.GetByteCount(line + "\n");
-                        linesCount++;
-
-                        Match match = lineRegex.Match(line);
-
-                        if (match.Success)
-                        {
-                            // @TODO: Remove this line. Only for debugging purposes. Replace with file write or database put
-                            //Debug.WriteLine(parseMatch(match));
-                        }
-
-                        // only report progress if reportInterval has been passed
-                        if (bytesReadSoFar - bytesLastReportedAt > reportIntervalInBytes)
-                        {
-                            int percentageComplete = (int)((float)bytesReadSoFar / totalSizeInBytes * 100);
-                            string progressMessage = $"Read {bytesReadSoFar / 1024} KB of {totalSizeInBytes / 1024} KB";
-                            worker.ReportProgress(percentageComplete, progressMessage);
-                            bytesLastReportedAt = bytesReadSoFar; // reset report interval
-                        }
-                    }
-                }
-            }
-
-            sw.Stop();
-
-            TimeSpan ts = sw.Elapsed;
-
-            Debug.WriteLine("\n\n-------------------------------------------------------------------------------------\n");
-            Debug.WriteLine("Elapsed Time is {0:00}:{1:00}:{2:00}.{3}", ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds);
-            Debug.WriteLine("\n-------------------------------------------------------------------------------------\n\n");
-        }
-
-
         private void ParallelizedBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             // Do not access the form's BackgroundWorker reference directly.
@@ -264,7 +196,7 @@ namespace DataReaderDaD
                         linesCount++;
 
                         Match lineMatch = lineRegex.Match(line);
-                        
+
 
                         if (lineMatch.Success)
                         {
@@ -279,11 +211,13 @@ namespace DataReaderDaD
                             string procname = lineMatch.Groups["PROCNAME"].Value;
                             int pid = Convert.ToInt32(lineMatch.Groups["PID"].Value);
                             int logcode = Convert.ToInt32(lineMatch.Groups["LOGCODE"].Value);
+                            string description = " "; //  Comment out if it doesn't work.
                             string type = lineMatch.Groups["TYPE"].Value;
 
                             DateTime fullDate = new DateTime(year, DateTime.ParseExact(month, "MMM", CultureInfo.CurrentCulture).Month, day, hour, minute, second);
 
-                            LogEntry entry = new LogEntry(fullDate, host, procname, pid, logcode, type);
+                            //LogEntry entry = new LogEntry(fullDate, host, procname, pid, logcode, type);
+                            LogEntry entry = new LogEntry(fullDate, host, procname, pid, logcode, description, type);
 
                             lines.Add(entry);
                         }
@@ -296,12 +230,13 @@ namespace DataReaderDaD
                             worker.ReportProgress(percentageComplete, progressMessage);
                             bytesLastReportedAt = bytesReadSoFar; // reset report interval
                         }
-                        if (lines.Count >= 50000)
+                        if (lines.Count >= BULKCOPY_THRESHOLD)
                         {
                             addToDatabase(lines);
                             lines.Clear();
                         }
                     }
+                    addToDatabase(lines);
                 }
             });
 
@@ -341,89 +276,52 @@ namespace DataReaderDaD
             OutputTextBox.Content = e.UserState?.ToString(); // pass progressmessage from worker to UI thread
         }
 
-
-        private string parseMatch(Match match)
-        {
-            //  Regex group matches being converted to variables that will eventually be sent to a database.
-            string date = match.Groups["DATE"].Value;
-            string time = match.Groups["TIME"].Value;
-            string host = match.Groups["HOST"].Value;
-            string procname = match.Groups["PROCNAME"].Value;
-            int pid = Convert.ToInt32(match.Groups["PID"].Value);
-            int logcode = Convert.ToInt32(match.Groups["LOGCODE"].Value);
-            string type = match.Groups["TYPE"].Value;
-
-            // A string that displays all of the variable from the regex group patterns.
-            string parsedLogLine = "Date: " + date
-                             + " Time: " + time
-                             + " Host: " + host
-                             + " Proc. Name: " + procname
-                             + " PID: " + pid
-                             + " Log Code: " + logcode
-                             + " Type: " + type;
-
-            return parsedLogLine;
-        }
-
-        private void addToDatabase(List<LogEntry> lines) 
+        private void addToDatabase(List<LogEntry> lines)
         {
             string connString;
 
-            // Data Source=WINSVR2019;Initial Catalog=NINERFISTAGING;Integrated Security=True
-            connString = @"Provider=SQLOLEDB;Data Source=WINSVR2019; Initial Catalog=NINERFISTAGING; Integrated Security=SSPI";
-            //oleDBInsert = "INSERT INTO STAGING(EntryTimestamp, Hostname, ProcessName, ProcessNumber, LogCode, Description,EntryTypeName) " +
-            //            "VALUES('" + date + "', '" + hostname + "', '" + procname + "', '" + pid + "', '" + log + "', NULL, '" + entrytype + "')";
+            connString = @"Server=localhost; Database=NINERFISTAGING; Integrated Security=True";
 
+            // SEE BOTTOM FOR BLOCK
 
-            //string commandText = "INSERT INTO STAGING(EntryTimestamp, Hostname, ProcessName, ProcessNumber, LogCode, Description, EntryTypeName) " +
-            //            "VALUES(@date, @hostname, @procname, @pid, @log, NULL, @entrytype)";
-
-            string commandText = "INSERT INTO STAGING(EntryTimestamp, Hostname, ProcessName, ProcessNumber, LogCode, Description, EntryTypeName) " +
-                        "VALUES(?, ?, ?, ?, ?, NULL, ?)";
-
-
-
-
-
-            OleDbConnection conn = new OleDbConnection(connString);
-            OleDbCommand cmd = conn.CreateCommand();
-            
-            try
+            using (SqlConnection destinationConnection =
+                   new SqlConnection(connString))
             {
-                conn.Open();
-                cmd.CommandText = commandText;
-                cmd.Parameters.AddRange(new OleDbParameter[]
+                destinationConnection.Open();
+
+               
+
+                using (SqlBulkCopy bulkCopy = new SqlBulkCopy(connString))
+                using (var reader = ObjectReader.Create(lines, "EntryTimestamp", "Hostname", "ProcessName"
+                                                          , "ProcessNumber", "LogCode", "Description"
+                                                          , "EntryTypeName"))
                 {
-                    new OleDbParameter("@date", new DateTime()),
-                    new OleDbParameter("@hostname", "DEFAULT_HOSTNAME_ERROR"),
-                    new OleDbParameter("@procname", "DEFAULT_PROCNAME_ERROR"),
-                    new OleDbParameter("@pid", int.MaxValue),
-                    new OleDbParameter("@log", int.MaxValue),
-                    new OleDbParameter("@entrytype", "DEFAULT_ENTRYTYPE_ERROR"),
+                    bulkCopy.DestinationTableName = "dbo.STAGING";
 
-                });
-                foreach( var line in lines )
-                {
-                    cmd.Parameters[0].Value = line.date;
-                    cmd.Parameters[1].Value = line.hostname;
-                    cmd.Parameters[2].Value = line.procname;
-                    cmd.Parameters[3].Value = line.pid;
-                    cmd.Parameters[4].Value = line.log;
-                    cmd.Parameters[5].Value = line.entrytype;
+                    bulkCopy.ColumnMappings.Add(new SqlBulkCopyColumnMapping("EntryTimestamp", "EntryTimestamp"));
+                    bulkCopy.ColumnMappings.Add(new SqlBulkCopyColumnMapping("Hostname", "Hostname"));
+                    bulkCopy.ColumnMappings.Add(new SqlBulkCopyColumnMapping("ProcessName", "ProcessName"));
+                    bulkCopy.ColumnMappings.Add(new SqlBulkCopyColumnMapping("ProcessNumber", "ProcessNumber"));
+                    bulkCopy.ColumnMappings.Add(new SqlBulkCopyColumnMapping("LogCode", "LogCode"));
+                    bulkCopy.ColumnMappings.Add(new SqlBulkCopyColumnMapping("Description", "Description"));
+                    bulkCopy.ColumnMappings.Add(new SqlBulkCopyColumnMapping("EntryTypeName", "EntryTypeName"));
 
+                    try
+                    {
+                        bulkCopy.WriteToServer(reader);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.Write(ex.ToString());
+                    }
+                    finally
+                    {
+                        reader.Close();
+                    }
 
-                    cmd.ExecuteNonQuery();
                 }
             }
-            catch (OleDbException ex)
-            {
-                MessageBox.Show(ex.Message + ex.StackTrace, "Exception Details");
-            }
-            finally
-            {
-                MessageBox.Show("Successfully added to database!", "Success");
-                conn.Close();
-            }
+
         }
 
         private void RemoveButton_Click(object sender, RoutedEventArgs e)
@@ -438,21 +336,24 @@ namespace DataReaderDaD
 
         struct LogEntry
         {
-            public DateTime date;
-            public string hostname;
-            public string procname;
-            public int pid;
-            public int log;
-            public string entrytype;
+            public DateTime EntryTimestamp;
+            public string Hostname;
+            public string ProcessName;
+            public int ProcessNumber;
+            public int LogCode;
+            public string Description; //  Comment out if all goes wrong.
+            public string EntryTypeName;
 
-            public LogEntry(DateTime date, string hostname, string procname, int pid, int log, string entrytype)
+            //public LogEntry(DateTime date, string hostname, string procname, int pid, int log, string entrytype)
+            public LogEntry(DateTime date, string hostname, string procname, int pid, int log, string description, string entrytype)
             {
-                this.date = date;
-                this.hostname = hostname;
-                this.procname = procname;
-                this.pid = pid;
-                this.log = log;
-                this.entrytype = entrytype;
+                this.EntryTimestamp = date;
+                this.Hostname = hostname;
+                this.ProcessName = procname;
+                this.ProcessNumber = pid;
+                this.LogCode = log;
+                this.Description = description;
+                this.EntryTypeName = entrytype;
             }
         }
     }
