@@ -85,24 +85,48 @@
             <ColumnDefinition Width="400"/>
         </Grid.ColumnDefinitions>
         <Label x:Name="TitleLabel" Content="NinerFi Analytics" Margin="41,13,10,13" FontSize="30" FontWeight="Bold" FontFamily="Limelight" Background="{x:Null}" Foreground="#FF015035" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-        <DataGrid x:Name="FilesDataGrid" ItemsSource="{Binding}" Margin="41,10,41,10" Grid.ColumnSpan="2" Grid.Row="1" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Height="NaN" Width="NaN" BorderBrush="{x:Null}" Background="{x:Null}" MinHeight="250" MinWidth="250" SelectionUnit="FullRow" RowDetailsVisibilityMode="Visible">
+        <!--<Rectangle StrokeThickness="2" Margin="-109,16,183,0" StrokeDashArray="4 4" RadiusX="10" RadiusY="10" Grid.ColumnSpan="2" Grid.Row="1" Panel.ZIndex="10" Stroke="#FF015035" MinWidth="250" MinHeight="250" Fill="Transparent"/>-->
+        <DataGrid RowStyle="{DynamicResource DataGridRowStyle1}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" x:Name="FilesDataGrid" ItemsSource="{Binding}" Margin="41,10,41,10" Grid.ColumnSpan="2" Grid.Row="1" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Height="NaN" Width="NaN" BorderBrush="{x:Null}" Background="{x:Null}" MinHeight="250" MinWidth="250" SelectionUnit="FullRow" RowDetailsVisibilityMode="Visible">
             <DataGrid.Columns>
-                <DataGridTemplateColumn>
-                    <DataGridTemplateColumn.Header>
-                        <Label Content="Remove?"/>
-                    </DataGridTemplateColumn.Header>
+                <DataGridTemplateColumn Width="24">
                     <DataGridTemplateColumn.CellTemplate >
                         <DataTemplate>
-                            <Button Content="Remove" Click="RemoveButton_Click"/>
+                            <Button Click="RemoveButton_Click">
+                                <Image Stretch="Fill" Height="20" Width="20">
+                                    <Image.Style>
+                                        <Style TargetType="{x:Type Image}">
+                                            <Setter Property="Source" Value="Icons/cancel_green.png" />
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Source" Value="Icons/cancel_red.png"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Image.Style>
+                                </Image>
+                                <Button.Template>
+                                    <ControlTemplate TargetType="Button">
+                                        <ContentPresenter Content="{TemplateBinding Content}"/>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Cursor" Value="Hand"/>
+                                            </Trigger>
+
+                                            <Trigger Property="IsMouseOver" Value="False">
+                                                <Setter Property="Cursor" Value="Arrow"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTextColumn Header="File Name" Binding="{Binding Name}"/>
-                <DataGridTextColumn Header="File Size" Binding="{Binding Length}"/>
+                <DataGridTextColumn Header="File Size" Binding="{Binding Length, StringFormat={}{0} MB}"/>
                 <DataGridTextColumn Header="File Location" Binding="{Binding DirectoryName}"/>
             </DataGrid.Columns>
         </DataGrid>
-        <Rectangle StrokeThickness="2" Margin="37,6,37,10" StrokeDashArray="4 4" RadiusX="10" RadiusY="10" Grid.ColumnSpan="2" Grid.Row="1" Panel.ZIndex="10" Stroke="#FF015035" MinWidth="250" MinHeight="250"/>
         <ProgressBar Style="{DynamicResource ProgressBarStyle1}" x:Name="DataProcessingProgress" Margin="41,0,41,0" Grid.ColumnSpan="2" VerticalAlignment="Center" Height="25" Grid.Row="2" Foreground="#FF015035" BorderBrush="#FF015035" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Center" Width="NaN" Background="#FFA39665" BorderThickness="2,2,2,2"/>
         <Label x:Name="OutputTextBox" Grid.Row="3" Grid.Column="1" Margin="0,0,41,0"/>
         <Button x:Name="StartButton" Grid.Row="4" Margin="213,0,0,0" Grid.Column="1" Content="Start" Click="StartButton_Click" Foreground="White" Background="#FF015035" BorderBrush="#FFA39665" MinHeight="32" MaxHeight="32" MaxWidth="150" MinWidth="150" HorizontalAlignment="Left" VerticalAlignment="Center" Height="32" Width="150"/>
