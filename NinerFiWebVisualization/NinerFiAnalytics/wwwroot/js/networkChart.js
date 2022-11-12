@@ -1,21 +1,34 @@
 const ctx = document.getElementById('networkChart');
 
-createNetworkChart();
+//use D3.js to load data
+d3.csv('csv/data_b.csv').then(data => {
+    const xs = [];
+    const ys = [];
 
-async function createNetworkChart() {
-    const data = await getData();
+    for (let i = 0; i < data.length; i++) {
+        //const year = data[i].Year;
+        //const day = data[i].Day;
+        //const month = data[i].Month;
+        const hostname = data[i].Hostname;
+        xs.push(hostname);
+        const countOfEntries = data[i]["Count of Entries"];
+        ys.push(countOfEntries);
+    }
+
+    //get number of access points from grouping unique entries in hostname column
+    let accessPoints = (data.map(d => d.Hostname)).keys();
 
     const networkChart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: data.xs,
+            labels: xs,
             datasets: [{
-                label: 'Count of Entries by Hostname',
-                data: data.ys,
+                label: 'Number of Log Entries',
+                data: ys,
                 fill: false,
                 backgroundColor: 'rgba(1, 80, 53, 1)',
                 borderColor: 'rgba(1, 80, 53, 0.3)',
-                borderWidth: 1,
+                borderWidth: 1
             }],
         },
         options: {
@@ -26,7 +39,7 @@ async function createNetworkChart() {
             plugins: {
                 title: {
                     display: true,
-                    text: 'Total Number of Access Points: ' + data.accessPoints,
+                    text: 'Total Number of Access Points: ' + accessPoints,
                     align: 'start',
                 }
             },
@@ -45,31 +58,8 @@ async function createNetworkChart() {
                 }
             }
         }
-    });
-}
+    })
+    //hide bootstrap spinner after data loads
+    d3.select('.spinner-border').style('display', 'none');
 
-async function getData() {
-    const xs = [];
-    const ys = [];
-
-    const response = await fetch('csv/data_b.csv');
-    const data = await response.text();
-
-    const table = data.split('\n').slice(1);
-    table.forEach(row => {
-        const columns = row.split(',');
-        //const year = columns[0];
-        //const day = columns[1];
-        //const month = columns[2];
-        const hostname = columns[3];
-        xs.push(hostname);
-        const countOfEntries = columns[4];
-        ys.push(countOfEntries);
-    });
-
-    //get num of access points from num of unique hostnames
-    let accessPoints = 0;
-    accessPoints = (xs.filter((value, index, self) => self.indexOf(value) === index)).length;
-
-    return { xs, ys, accessPoints };
-}
+}).catch(error => console.log(error));

@@ -2,6 +2,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+builder.Services.AddDbContext<NINERFIDB>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("NINERFIDB") ?? throw new InvalidOperationException("Connection string 'NINERFIDB' not found.")));
+
 
 var app = builder.Build();
 

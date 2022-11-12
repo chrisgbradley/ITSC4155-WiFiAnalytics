@@ -6,6 +6,8 @@
     <title>@ViewData["Title"] - NinerFi Analytics</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 
 <body>
@@ -50,9 +52,13 @@
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <li><a class="dropdown-item" asp-page="/NoOfLogEntries">Number Of Log Entries</a></li>
                                 <li><a class="dropdown-item" asp-page="/NetworkStatistics">Network Statistics</a></li>
+                                <li><a class="dropdown-item" asp-page="/ErrorTracking">Error Tracking</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" asp-page="/LogsByDate">Logs By Date</a></li>
                             </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-page="/Datapoints">Datapoints</a>
                         </li>
                     </ul>
                     <form class="d-flex">
@@ -85,8 +91,7 @@
     @*START BOOTSTRAP*@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+    
     @await RenderSectionAsync("Scripts", required: false)
     @*END BOOTSTRAP*@
 </body>

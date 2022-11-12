@@ -4,7 +4,16 @@
     ViewData["Title"] = "NoOfLogEntries";
 }
 
-<h2>Number of Logs by Time Chart</h2>
-<canvas id="logsChart" aria-label="Number of Logs by Minute" role="img"></canvas>
+<div class="p-4">
+    <h2>Number of Logs by Time Chart</h2>
 
-<script src="~/js/logChart.js" asp-append-version="true"></script> 
+    <div class="text-center">
+        <div class="spinner-border text-success" style="width: 5rem; height: 5rem;" role="status" aria-label="Spinning loading indicator">
+            <!--<span class="sr-only">Loading...</span>-->
+        </div>
+    </div>
+
+    <canvas id="logsChart" aria-label="Number of log entries chart" role="img"></canvas>
+
+    <script src="~/js/logChart.js" asp-append-version="true"></script>
+</div>

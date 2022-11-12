@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "CSKdvIOdn4K16o8opvhYys//EBEaG6J2MahLH4/O7/I=",
+  "Hash": "Pcp4+Bo/hN/O9x54Y7tLPWeYo77/pODR4EgihcXdKGc=",
   "Source": "NinerFiAnalytics",
   "BasePath": "_content/NinerFiAnalytics",
   "Mode": "Default",
@@ -68,6 +68,23 @@
       "OriginalItemSpec": "wwwroot\\csv\\data_b.csv"
     },
     {
+      "Identity": "C:\\Users\\emily\\ITSC4155-WiFiAnalytics\\NinerFiWebVisualization\\NinerFiAnalytics\\wwwroot\\csv\\errortest.csv",
+      "SourceId": "NinerFiAnalytics",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\emily\\ITSC4155-WiFiAnalytics\\NinerFiWebVisualization\\NinerFiAnalytics\\wwwroot\\",
+      "BasePath": "_content/NinerFiAnalytics",
+      "RelativePath": "csv/errortest.csv",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\csv\\errortest.csv"
+    },
+    {
       "Identity": "C:\\Users\\emily\\ITSC4155-WiFiAnalytics\\NinerFiWebVisualization\\NinerFiAnalytics\\wwwroot\\csv\\testdata.csv",
       "SourceId": "NinerFiAnalytics",
       "SourceType": "Discovered",
@@ -119,6 +136,40 @@
       "OriginalItemSpec": "wwwroot\\images\\campus.jpg"
     },
     {
+      "Identity": "C:\\Users\\emily\\ITSC4155-WiFiAnalytics\\NinerFiWebVisualization\\NinerFiAnalytics\\wwwroot\\images\\download_done_icon.svg",
+      "SourceId": "NinerFiAnalytics",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\emily\\ITSC4155-WiFiAnalytics\\NinerFiWebVisualization\\NinerFiAnalytics\\wwwroot\\",
+      "BasePath": "_content/NinerFiAnalytics",
+      "RelativePath": "images/download_done_icon.svg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\download_done_icon.svg"
+    },
+    {
+      "Identity": "C:\\Users\\emily\\ITSC4155-WiFiAnalytics\\NinerFiWebVisualization\\NinerFiAnalytics\\wwwroot\\images\\file_download_icon.svg",
+      "SourceId": "NinerFiAnalytics",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\emily\\ITSC4155-WiFiAnalytics\\NinerFiWebVisualization\\NinerFiAnalytics\\wwwroot\\",
+      "BasePath": "_content/NinerFiAnalytics",
+      "RelativePath": "images/file_download_icon.svg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\file_download_icon.svg"
+    },
+    {
       "Identity": "C:\\Users\\emily\\ITSC4155-WiFiAnalytics\\NinerFiWebVisualization\\NinerFiAnalytics\\wwwroot\\images\\logo.png",
       "SourceId": "NinerFiAnalytics",
       "SourceType": "Discovered",
@@ -153,6 +204,23 @@
       "OriginalItemSpec": "wwwroot\\images\\wifi.png"
     },
     {
+      "Identity": "C:\\Users\\emily\\ITSC4155-WiFiAnalytics\\NinerFiWebVisualization\\NinerFiAnalytics\\wwwroot\\js\\dataPoints.js",
+      "SourceId": "NinerFiAnalytics",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\emily\\ITSC4155-WiFiAnalytics\\NinerFiWebVisualization\\NinerFiAnalytics\\wwwroot\\",
+      "BasePath": "_content/NinerFiAnalytics",
+      "RelativePath": "js/dataPoints.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\dataPoints.js"
+    },
+    {
       "Identity": "C:\\Users\\emily\\ITSC4155-WiFiAnalytics\\NinerFiWebVisualization\\NinerFiAnalytics\\wwwroot\\js\\dateChart.js",
       "SourceId": "NinerFiAnalytics",
       "SourceType": "Discovered",
@@ -168,6 +236,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\js\\dateChart.js"
+    },
+    {
+      "Identity": "C:\\Users\\emily\\ITSC4155-WiFiAnalytics\\NinerFiWebVisualization\\NinerFiAnalytics\\wwwroot\\js\\errorChart.js",
+      "SourceId": "NinerFiAnalytics",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\emily\\ITSC4155-WiFiAnalytics\\NinerFiWebVisualization\\NinerFiAnalytics\\wwwroot\\",
+      "BasePath": "_content/NinerFiAnalytics",
+      "RelativePath": "js/errorChart.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\errorChart.js"
     },
     {
       "Identity": "C:\\Users\\emily\\ITSC4155-WiFiAnalytics\\NinerFiWebVisualization\\NinerFiAnalytics\\wwwroot\\js\\logChart.js",

@@ -1,64 +1,95 @@
-﻿const ctx = document.getElementById('testChart');
+﻿const ctx = document.getElementById('testChart').getContext('2d');
 
-createChart();
+//use D3.js to load data
+d3.csv('csv/testdata.csv').then(data => {
+    const rows = [];
+    const xs = [];
+    const ys = [];
+    
+    for (let i = 0; i < data.length; i++) {
+        rows.push({
+            year: data[i].Year,
+            month: data[i].Month,
+            day: data[i].Day,
+            hour: data[i].Hour,
+            minute: data[i].Minute,
+            numLogs: data[i]["Number of Log Entries"]
+        });
+    }
 
-async function createChart() {
-    const data = await getData();
+    for (let i = 0; i < rows.length; i++) {
+        xs.push(rows[i].minute);
+        ys.push(rows[i].numLogs);
+    }
+
+    let delayed;
+
+    //Gradient fill
+    let gradient = ctx.createLinearGradient(0, 0, 0, 400);
+    gradient.addColorStop(0, 'rgba(58, 123, 213, 1');
+    gradient.addColorStop(1, 'rgba(0, 210, 255, 0.3)');
 
     const testChart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: data.xs,
+            labels: xs,
             datasets: [{
                 label: 'Number of Log Entries',
-                data: data.ys,
-                fill: false,
-                backgroundColor: 'rgba(58, 123, 213, 1)',
-                borderColor: 'rgba(0, 210, 255, 0.3)',
-                borderWidth: 1,
+                data: rows,
+                fill: true,
+                backgroundColor: gradient,
+                borderColor: '#fff',
+                pointBackgroundColor: 'rgb(189, 195, 199)'
             }],
         },
         options: {
             responsive: true,
             layout: {
-                padding: 10
+                padding: 40
             },
-            scales: {
-                x: {
-                    title: {
-                        display: true,
-                        text: 'Minute'
+            parsing: {
+                xAxisKey: 'minute',
+                yAxisKey: 'numLogs'
+            },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        title: function (context) {
+                            const item = context[0].raw;
+                            return "Datetime: " + item.year + "-" + item.month + "-" +
+                                item.day + " " + item.hour + ":" + item.minute;
+                        },
+                        body: (context) => {
+                            context.parsed.x + ' log entries';
+                        }
                     }
+                }   
+            },
+            radius: 5,
+            hitRadius: 30,
+            hoverRadius: 10,
+            animation: {
+                onComplete: () => {
+                    delayed = true;
                 },
-                y: {
-                    title: {
-                        display: true,
-                        text: 'Number of Entries'
+                delay: (context) => {
+                    let delay = 0;
+                    if (context.type === 'data' && context.mode === 'default' && !delayed) {
+                        delay = context.dataIndex * 300 + context.datasetIndex * 100;
                     }
+                    return delay;
                 }
             }
         }
-    });
-}
+    })
+    //hide bootstrap spinner after data loads
+    d3.select('.spinner-border').style('display', 'none');
 
-async function getData(x, y) {
-    const xs = [];
-    const ys = [];
+}).catch(error => console.log(error));
 
-    const response = await fetch('csv/testdata.csv');
-    const data = await response.text();
-
-    const table = data.split('\n').slice(1);
-    table.forEach(row => {
-        const columns = row.split(',');
-        const year = columns[0];
-        const month = columns[1];
-        const day = columns[2];
-        xs.push(day);
-        const hour = columns[3];
-        const minute = columns[4];
-        const numLogs = columns[5];
-        ys.push(numLogs);
-    });
-    return { xs, ys };
-}
+//csv file download
+/*
+ document.getElementById('document').addEventListener('click', function () {
+    stuff here
+})
+*/

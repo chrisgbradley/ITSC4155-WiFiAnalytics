@@ -15,8 +15,16 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = C:\Users\emily\ITSC4155-WiFiAnalytics\NinerFiWebVisualization\NinerFiAnalytics
 build_property._RazorSourceGeneratorDebug = 
 
+[C:/Users/emily/ITSC4155-WiFiAnalytics/NinerFiWebVisualization/NinerFiAnalytics/Pages/Datapoints.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGF0YXBvaW50cy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/emily/ITSC4155-WiFiAnalytics/NinerFiWebVisualization/NinerFiAnalytics/Pages/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3IuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/emily/ITSC4155-WiFiAnalytics/NinerFiWebVisualization/NinerFiAnalytics/Pages/ErrorTracking.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3JUcmFja2luZy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/emily/ITSC4155-WiFiAnalytics/NinerFiWebVisualization/NinerFiAnalytics/Pages/Heatmap.cshtml]

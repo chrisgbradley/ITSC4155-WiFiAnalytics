@@ -4,7 +4,16 @@
     ViewData["Title"] = "Network Statistics";
 }
 
-<h2>Network Statistics</h2>
-<canvas id="networkChart" aria-label="Network Statistics Chart" role="img"></canvas>
+<div class="p-4">
+    <h2>Network Statistics</h2>
 
-<script src="~/js/networkChart.js" asp-append-version="true"></script> 
+    <div class="text-center">
+        <div class="spinner-border text-success" style="width: 3rem; height: 3rem;" role="status" aria-label="Spinning loading indicator">
+            <!--<span class="sr-only">Loading...</span>-->
+        </div>
+    </div>
+
+    <canvas id="networkChart" aria-label="Network Statistics Chart" role="img"></canvas>
+
+    <script src="~/js/networkChart.js" asp-append-version="true"></script>
+</div>
