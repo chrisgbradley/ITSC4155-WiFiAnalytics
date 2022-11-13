@@ -33,11 +33,16 @@ namespace DataReaderDaD
     public partial class MainWindow : Window
     {
 
-        private readonly Regex lineRegex = new Regex(@"(?<DATE>(?<MONTH>[a-zA-Z]+)\s+(?<DAY>0?[1-9]|[12][0-9]|3[01]))\s+"
-                                        + @"(?<TIME>(?<HOUR>[0-9]{2}):(?<MINUTE>[0-9]{2}):(?<SECOND>[0-9]{2}))\s(?<HOST>\S+)\s+"
-                                        + @"(?<PROCNAME>[a-zA-Z0-9\-]+)\[(?<PID>[^\]]*)\]:\s+"
-                                        + @"<(?<LOGCODE>[0-9]{6})>\s+(?:<(\d*)>\s+)?"
-                                        + @"<(?<TYPE>[a-zA-Z]+)>");
+        private readonly Regex lineRegex = new Regex(@"(?<DATE>[a-zA-Z]+\s+(0?[1-9]|[12][0-9]|3[01]))\s+"
+                                                   + @"(?<TIME>[0-9]{2}:[0-9]{2}:[0-9]{2})\s"
+                                                   + @"(?<HOST>\S+)\s+"
+                                                   + @"(?<PROCNAME>[a-zA-Z0-9\-]+)"
+                                                   + @"\[(?<PID>[^\]]*)\]:\s+"
+                                                   + @"<(?<LOGCODE>[0-9]{6})>\s+"
+                                                   + @"(?:<(\d*)>\s+)?"
+                                                   + @"<(?<TYPE>[a-zA-Z]+)>\s+"
+                                                   + @"(.*?)\s+(?<HOSTNAME>[a-zA-Z0-9\-]+)?"
+                                                   + @"\@?(?<IPADDRESS>(?:[0-9]{1,3}.){3}[0-9]{1,3})");
 
         private readonly Regex yearRegex = new Regex(@".\d{2}-\d{2}-(?<YEAR>\d{4}).");
 
@@ -211,13 +216,15 @@ namespace DataReaderDaD
                             string procname = lineMatch.Groups["PROCNAME"].Value;
                             int pid = Convert.ToInt32(lineMatch.Groups["PID"].Value);
                             int logcode = Convert.ToInt32(lineMatch.Groups["LOGCODE"].Value);
+                            string hostname = lineMatch.Groups["HOSTNAME"].Value;
+                            string ipaddress = lineMatch.Groups["IPADDRESS"].Value;
                             string description = " "; //  Comment out if it doesn't work.
                             string type = lineMatch.Groups["TYPE"].Value;
 
                             DateTime fullDate = new DateTime(year, DateTime.ParseExact(month, "MMM", CultureInfo.CurrentCulture).Month, day, hour, minute, second);
 
                             //LogEntry entry = new LogEntry(fullDate, host, procname, pid, logcode, type);
-                            LogEntry entry = new LogEntry(fullDate, host, procname, pid, logcode, description, type);
+                            LogEntry entry = new LogEntry(fullDate, hostname, ipaddress, procname, pid, logcode, description, type);
 
                             lines.Add(entry);
                         }
@@ -292,7 +299,7 @@ namespace DataReaderDaD
                
 
                 using (SqlBulkCopy bulkCopy = new SqlBulkCopy(connString))
-                using (var reader = ObjectReader.Create(lines, "EntryTimestamp", "Hostname", "ProcessName"
+                using (var reader = ObjectReader.Create(lines, "EntryTimestamp", "Hostname", "IPAddress", "ProcessName"
                                                           , "ProcessNumber", "LogCode", "Description"
                                                           , "EntryTypeName"))
                 {
@@ -300,6 +307,7 @@ namespace DataReaderDaD
 
                     bulkCopy.ColumnMappings.Add(new SqlBulkCopyColumnMapping("EntryTimestamp", "EntryTimestamp"));
                     bulkCopy.ColumnMappings.Add(new SqlBulkCopyColumnMapping("Hostname", "Hostname"));
+                    bulkCopy.ColumnMappings.Add(new SqlBulkCopyColumnMapping("IPAddress", "IPAddress"));
                     bulkCopy.ColumnMappings.Add(new SqlBulkCopyColumnMapping("ProcessName", "ProcessName"));
                     bulkCopy.ColumnMappings.Add(new SqlBulkCopyColumnMapping("ProcessNumber", "ProcessNumber"));
                     bulkCopy.ColumnMappings.Add(new SqlBulkCopyColumnMapping("LogCode", "LogCode"));
@@ -338,6 +346,7 @@ namespace DataReaderDaD
         {
             public DateTime EntryTimestamp;
             public string Hostname;
+            public string IPAddress;
             public string ProcessName;
             public int ProcessNumber;
             public int LogCode;
@@ -345,10 +354,11 @@ namespace DataReaderDaD
             public string EntryTypeName;
 
             //public LogEntry(DateTime date, string hostname, string procname, int pid, int log, string entrytype)
-            public LogEntry(DateTime date, string hostname, string procname, int pid, int log, string description, string entrytype)
+            public LogEntry(DateTime date, string hostname, string ipaddress, string procname, int pid, int log, string description, string entrytype)
             {
                 this.EntryTimestamp = date;
                 this.Hostname = hostname;
+                this.IPAddress = ipaddress;
                 this.ProcessName = procname;
                 this.ProcessNumber = pid;
                 this.LogCode = log;
