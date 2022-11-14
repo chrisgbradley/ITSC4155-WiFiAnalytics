@@ -42,7 +42,7 @@ namespace DataReaderDaD
 
         private readonly Regex yearRegex = new Regex(@".\d{2}-\d{2}-(?<YEAR>\d{4}).");
 
-        private readonly int BULKCOPY_THRESHOLD = 750000;
+        private readonly int BULKCOPY_THRESHOLD = 50000;
 
         /* 
          * Connection String
@@ -309,6 +309,10 @@ namespace DataReaderDaD
                     bulkCopy.ColumnMappings.Add(new SqlBulkCopyColumnMapping("LogCode", "LogCode"));
                     bulkCopy.ColumnMappings.Add(new SqlBulkCopyColumnMapping("Description", "Description"));
                     bulkCopy.ColumnMappings.Add(new SqlBulkCopyColumnMapping("EntryTypeName", "EntryTypeName"));
+
+                    bulkCopy.BatchSize = 50000;
+                    bulkCopy.BulkCopyTimeout = 0;
+
 
                     try
                     {
