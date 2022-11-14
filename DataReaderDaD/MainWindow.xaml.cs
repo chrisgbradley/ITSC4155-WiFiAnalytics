@@ -42,7 +42,7 @@ namespace DataReaderDaD
 
         private readonly Regex yearRegex = new Regex(@".\d{2}-\d{2}-(?<YEAR>\d{4}).");
 
-        private readonly int BULKCOPY_THRESHOLD = 50000;
+        private readonly int BULKCOPY_THRESHOLD = 250000;
 
         /* 
          * Connection String
