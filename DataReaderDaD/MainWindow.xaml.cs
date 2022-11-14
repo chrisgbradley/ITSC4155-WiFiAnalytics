@@ -33,20 +33,16 @@ namespace DataReaderDaD
     public partial class MainWindow : Window
     {
 
-        private readonly Regex lineRegex = new Regex(@"(?<DATE>[a-zA-Z]+\s+(0?[1-9]|[12][0-9]|3[01]))\s+"
-                                                   + @"(?<TIME>[0-9]{2}:[0-9]{2}:[0-9]{2})\s"
-                                                   + @"(?<HOST>\S+)\s+"
-                                                   + @"(?<PROCNAME>[a-zA-Z0-9\-]+)"
-                                                   + @"\[(?<PID>[^\]]*)\]:\s+"
-                                                   + @"<(?<LOGCODE>[0-9]{6})>\s+"
-                                                   + @"(?:<(\d*)>\s+)?"
-                                                   + @"<(?<TYPE>[a-zA-Z]+)>\s+"
-                                                   + @"(.*?)\s+(?<HOSTNAME>[a-zA-Z0-9\-]+)?"
-                                                   + @"\@?(?<IPADDRESS>(?:[0-9]{1,3}.){3}[0-9]{1,3})");
+        private readonly Regex lineRegex = new Regex(@"(?<DATE>(?<MONTH>[a-zA-Z]+)\s+(?<DAY>0?[1-9]|[12][0-9]|3[01]))\s+"
+                                                   + @"(?<TIME>(?<HOUR>[0-9]{2}):(?<MINUTE>[0-9]{2}):(?<SECOND>[0-9]{2}))\s(?<HOST>\S+)\s+"
+                                                   + @"(?<PROCNAME>[a-zA-Z0-9\-]+)\[(?<PID>[^\]]*)\]:\s+"
+                                                   + @"<(?<LOGCODE>[0-9]{6})>\s+(?:<(\d*)>\s+)?"
+                                                   + @"<(?<TYPE>[a-zA-Z]+)>"
+                                                   + @"\s+(.*?)\s+((?<HOSTNAME>[a-zA-Z0-9\-]+)[\@\s])?(?<IPADDRESS>(?:[0-9]{1,3}.){3}[0-9]{1,3})");
 
         private readonly Regex yearRegex = new Regex(@".\d{2}-\d{2}-(?<YEAR>\d{4}).");
 
-        private readonly int BULKCOPY_THRESHOLD = 50000;
+        private readonly int BULKCOPY_THRESHOLD = 750000;
 
         /* 
          * Connection String
@@ -296,7 +292,7 @@ namespace DataReaderDaD
             {
                 destinationConnection.Open();
 
-               
+
 
                 using (SqlBulkCopy bulkCopy = new SqlBulkCopy(connString))
                 using (var reader = ObjectReader.Create(lines, "EntryTimestamp", "Hostname", "IPAddress", "ProcessName"
