@@ -86,10 +86,3 @@ d3.csv('csv/testdata.csv').then(data => {
     d3.select('.spinner-border').style('display', 'none');
 
 }).catch(error => console.log(error));
-
-//csv file download
-/*
- document.getElementById('document').addEventListener('click', function () {
-    stuff here
-})
-*/

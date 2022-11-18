@@ -1,9 +1,8 @@
 const ctx = document.getElementById('errorChart').getContext('2d');
 
 //use D3.js to load data
-d3.csv('csv/errortest.csv').then(data => {
+d3.csv('csv/testData.csv').then(data => {
     const dataObj = [];
-    const xs = [];
 
     for (let i = 0; i < data.length; i++) {
         dataObj.push({
@@ -12,51 +11,69 @@ d3.csv('csv/errortest.csv').then(data => {
             day: data[i].Day,
             hour: data[i].Hour,
             minute: data[i].Minute,
-            numLogs: data[i]["Number of Log Entries"],
-            types: data[i].Types
+            types: data[i].TypeName,
+            numLogs: data[i].log_entries
         });
     }
 
-    //get unique log code types
-    //types = types.filter((value, index, self) => self.indexOf(value) === index);
-
-    //for each log code type, create a dataset
-
-    //group data by type
+    //group data by error type
     const groupedData = d3.group(dataObj, d => d.types);
-    let x = d3.map(groupedData.get("NOTI"), d => d.month);
-    let y = d3.map(groupedData.get("NOTI"), d => d.day);
-    let r = d3.map(groupedData.get("NOTI"), d => d.numLogs);
-    const bubbleData = [{ x: x, y: y, r: r }];
-    console.log(groupedData);
+
+    //map each error type's data to an object 
+    //that chart.js can put in a bubble chart
+    function getBubbleData(error) {
+        return d3.map(groupedData.get(error), (d) => {
+            return {
+                x: d.day,
+                y: d.month,
+                r: d.numLogs
+            };
+        });
+    }
 
     const errorChart = new Chart(ctx, {
         type: 'bubble',
         data: {
-            labels: xs,
             datasets: [
                 {
                     label: "NOTI",
-                    data: dataObj,
-                    backgroundColor: 'rgba(255, 79, 66, 0.5)',
-                    borderColor: 'rgba(255, 41, 29, 1)'
+                    data: getBubbleData("NOTI"),
+                    backgroundColor: 'rgba(0, 255, 144, 0.5)',
+                    borderColor: 'rgba(0, 204, 116, 1)'
+                },
+                {
+                    label: "WARN",
+                    data: getBubbleData("WARN"),
+                    backgroundColor: 'rgba(230, 114, 0, 0.5)',
+                    borderColor: 'rgba(252, 92, 13, 1)'
+                },
+                {
+                    label: "ERRS",
+                    data: getBubbleData("ERRS"),
+                    backgroundColor: 'rgba(255, 17, 0, 0.5)',
+                    borderColor: 'rgba(204, 13, 0, 1)'
+                },
+                {
+                    label: "INFO",
+                    data: getBubbleData("INFO"),
+                    backgroundColor: 'rgba(0, 7, 255, 0.5)',
+                    borderColor: 'rgba(0, 7, 204, 1)'
                 }
                 ]
         },
         options: {
-            responsive: true,
             aspectRatio: 1,
             scales: {
                 x: {
                     title: {
                         display: true,
-                        text: 'Months'
+                        text: 'Day'
                     }
                 },
                 y: {
                     title: {
                         display: true,
-                        text: 'Days'
+                        text: 'Month'
                     }
                 }
             },
