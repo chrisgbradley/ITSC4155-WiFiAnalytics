@@ -1,0 +1,115 @@
+﻿@page "{handler?}"
+@model NinerFiVisualize.Pages.Charts.ErrorTrackingModel
+@{
+    Layout = "../Shared/_ChartsLayout.cshtml";
+    ViewData["Title"] = "Log Count";
+}
+
+<div class="p-4">
+    <h2>Error Tracking</h2>
+
+    <div class="text-center">
+        <div class="spinner-border text-success" style="width: 5rem; height: 5rem;" role="status" aria-label="Spinning loading indicator">
+            <!--<span class="sr-only">Loading...</span>-->
+        </div>
+    </div>
+
+    <canvas id="logsChart" aria-label="Log entries aggregated count by time chart" role="img" style="width: 20%; height: 40%"></canvas>
+
+
+</div>
+
+@section Scripts
+    {
+    <script type="application/javascript">
+
+        $(document).ready(function () {
+            $.ajax({
+                url: '/api/charts/get-log-count',
+                type: 'GET',
+                contentType: "application/json; charset=utf-8",
+                dataType: 'json',
+                success: initializeChart,
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert(xhr.status);
+                    alert(thrownError);
+                }
+            });
+        })
+
+        function initializeChart(response)
+        {
+            const ctx = document.getElementById('logsChart');
+            const rows = response;
+            let xs = [];
+            let ys = [];
+
+            for (let i = 0; i < rows.length; i++) {
+                xs.push(rows[i].minute);
+                ys.push(rows[i].numLogs);
+            }
+
+            //create chart
+            const logsChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: xs,
+                    datasets: [
+                        {
+                            label: 'Number of Log Entries',
+                            data: rows,
+                            fill: false,
+                            backgroundColor: 'rgba(1, 80, 53, 1)',
+                            borderColor: 'rgba(1, 80, 53, 0.3)',
+                            borderWidth: 1
+                        }
+                    ],
+                },
+                options: {
+                    responsive: true,
+                    layout: {
+                        padding: 10
+                    },
+                    parsing: {
+                        xAxisKey: 'minute',
+                        yAxisKey: 'numLogs'
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'January 1st - 10th, 2021',
+                            align: 'start',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                title: function (context) {
+                                    const item = context[0].raw;
+                                    return "Datetime: " + item.year + "-" + item.month + "-" +
+                                        item.day + " " + item.hour + ":" + item.minute;
+                                },
+                                body: (context) => {
+                                    context.parsed.x + ' log entries';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Minute'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Number of Entries'
+                            }
+                        }
+                    }
+                }
+            })
+        }
+
+    </script>
+    }

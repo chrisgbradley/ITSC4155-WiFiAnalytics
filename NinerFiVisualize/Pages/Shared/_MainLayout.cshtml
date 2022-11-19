@@ -1,0 +1,98 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - NinerFi Analytics</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+</head>
+
+<body>
+
+    @*START NAVBAR*@
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background-color: #046a38;">
+            <div class="container-fluid">
+
+                @*Navbar Brand*@
+                <a class="navbar-brand" href="/Index">
+                    NINERFI ANALYTICS
+                </a>
+
+                @*Toggle Button*@
+                <button class="navbar-toggler" type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent"
+                        aria-controls="navbarSupportedContent"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation">
+
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                @*Navbar Content*@
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-page="/Index">Overview</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-page="/Heatmap">Heatmap</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-page="/OneIT">OneIT</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Charts
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" asp-page="/Charts/NoOfLogEntries">Number Of Log Entries</a></li>
+                                <li><a class="dropdown-item" asp-page="/Charts/NetworkStatistics">Network Statistics</a></li>
+                                <li><a class="dropdown-item" asp-page="/Charts/ErrorTracking">Error Tracking</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" asp-page="/Charts/LogCount">Aggregate Totals of Log Entries</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-page="/Datapoints">Datapoints</a>
+                        </li>
+                    </ul>
+                    <form class="d-flex">
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-success" type="submit">Search</button>
+                    </form>
+                </div>
+
+            </div>
+        </nav>
+    </header>
+    @*END NAVBAR*@
+
+    @*START MAIN CONTENT*@
+    <div>
+        <main role="main">
+            @RenderBody()
+        </main>
+    </div>
+    @*END MAIN CONTENT*@
+
+    @*START FOOTER*@
+    <footer class="bg-dark text center text-white">
+        <div class="container-fluid">
+            &copy; NinerFi Analytics
+        </div>
+    </footer>
+    @*END FOOTER*@
+
+    @*START BOOTSTRAP*@
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+    @*END BOOTSTRAP*@
+</body>
+</html>

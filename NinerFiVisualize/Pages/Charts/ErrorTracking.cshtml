@@ -1,0 +1,113 @@
+﻿@page "{handler?}"
+@model NinerFiVisualize.Pages.Charts.ErrorTrackingModel
+@{
+    Layout = "../Shared/_ChartsLayout.cshtml";
+    ViewData["Title"] = "Error Tracking";
+}
+
+<div class="p-4">
+    <h2>Error Tracking</h2>
+
+    <div class="text-center">
+        <div class="spinner-border text-success" style="width: 5rem; height: 5rem;" role="status" aria-label="Spinning loading indicator">
+            <!--<span class="sr-only">Loading...</span>-->
+        </div>
+    </div>
+
+    <canvas id="errorChart" aria-label="Error Tracking Chart" role="img" style="width: 20%; height: 40%"></canvas>
+
+
+</div>
+
+@section Scripts
+    {
+    <script type="application/javascript">
+
+        $(document).ready(function () {
+            $.ajax({
+                url: '/api/charts/get-error-tracking',
+                type: 'GET',
+                contentType: "application/json; charset=utf-8",
+                dataType: 'json',
+                success: initializeChart,
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert(xhr.status);
+                    alert(thrownError);
+                }
+            });
+        })
+
+        function initializeChart(response)
+        {
+            const data = response;
+            console.log(data);
+
+
+            const ctx = document.getElementById('errorChart').getContext('2d');
+
+            const hours = data.map(entry => entry.hour);
+
+            let delayed;
+
+            //Gradient fill
+            let gradient = ctx.createLinearGradient(0, 0, 0, 400);
+            gradient.addColorStop(0, 'rgba(58, 123, 213, 1');
+            gradient.addColorStop(1, 'rgba(0, 210, 255, 0.3)');
+
+            const testChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: hours,
+                    datasets: [{
+                        label: 'Number of Log Entries',
+                        data: data,
+                        fill: true,
+                        backgroundColor: gradient,
+                        borderColor: '#fff',
+                        pointBackgroundColor: 'rgb(189, 195, 199)'
+                    }],
+                },
+                options: {
+                    responsive: true,
+                    layout: {
+                        padding: 40
+                    },
+                    parsing: {
+                        xAxisKey: 'hour',
+                        yAxisKey: 'number_of_logs'
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                title: function (context) {
+                                    const item = context[0].raw;
+                                    return "Datetime: " + item.year + "-" + item.month + "-" +
+                                        item.day + " " + item.hour + ":" + item.minute;
+                                },
+                                body: (context) => {
+                                    context.parsed.x + ' log entries';
+                                }
+                            }
+                        }
+                    },
+                    radius: 5,
+                    hitRadius: 30,
+                    hoverRadius: 10,
+                    animation: {
+                        onComplete: () => {
+                            delayed = true;
+                        },
+                        delay: (context) => {
+                            let delay = 0;
+                            if (context.type === 'data' && context.mode === 'default' && !delayed) {
+                                delay = context.dataIndex * 300 + context.datasetIndex * 100;
+                            }
+                            return delay;
+                        }
+                    }
+                }
+            })
+        }
+
+    </script>
+    }
