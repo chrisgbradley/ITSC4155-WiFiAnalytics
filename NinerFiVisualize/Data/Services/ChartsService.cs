@@ -26,7 +26,7 @@ namespace NinerFiVisualize.Data.Services
             IOrderedQueryable<VwLogCount> query;
 
             query = from view in _context.VwLogCounts
-                        orderby view.Year, view.Month, view.Day
+                        orderby view.Year, view.Month, view.Day, view.Hour
                         select view;
 
             return query.ToList();

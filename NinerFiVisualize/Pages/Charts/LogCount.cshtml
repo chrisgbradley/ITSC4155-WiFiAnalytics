@@ -6,15 +6,15 @@
 }
 
 <div class="p-4">
-    <h2>Error Tracking</h2>
+    <h2>Log Count</h2>
 
     <div class="text-center">
-        <div class="spinner-border text-success" style="width: 5rem; height: 5rem;" role="status" aria-label="Spinning loading indicator">
+        <div class="spinner-border text-success" style="display:none; width: 5rem; height: 5rem;" role="status" aria-label="Spinning loading indicator">
             <!--<span class="sr-only">Loading...</span>-->
         </div>
     </div>
 
-    <canvas id="logsChart" aria-label="Log entries aggregated count by time chart" role="img" style="width: 20%; height: 40%"></canvas>
+    <canvas id="logsChart" aria-label="Log entries aggregated count by time chart" role="img" style="width: 840px; height: 480px"></canvas>
 
 
 </div>
@@ -23,13 +23,21 @@
     {
     <script type="application/javascript">
 
+        let responseJSON = null;
+
         $(document).ready(function () {
+
+            $('.spinner-border').show();
+
             $.ajax({
                 url: '/api/charts/get-log-count',
                 type: 'GET',
                 contentType: "application/json; charset=utf-8",
                 dataType: 'json',
-                success: initializeChart,
+                success: (data) => {
+                    responseJSON = data;
+                    initializeChart(data);
+                },
                 error: function (xhr, ajaxOptions, thrownError) {
                     alert(xhr.status);
                     alert(thrownError);
@@ -39,25 +47,21 @@
 
         function initializeChart(response)
         {
+            console.log(response);
             const ctx = document.getElementById('logsChart');
-            const rows = response;
-            let xs = [];
-            let ys = [];
 
-            for (let i = 0; i < rows.length; i++) {
-                xs.push(rows[i].minute);
-                ys.push(rows[i].numLogs);
-            }
+            const filtered = d3.rollup(response, v => d3.sum(v, d => d.numberOfLogs), d => d.day);
+            
 
             //create chart
             const logsChart = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: xs,
+                    labels: Array.from(filtered.keys()),
                     datasets: [
                         {
                             label: 'Number of Log Entries',
-                            data: rows,
+                            data: Array.from(filtered.values()),
                             fill: false,
                             backgroundColor: 'rgba(1, 80, 53, 1)',
                             borderColor: 'rgba(1, 80, 53, 0.3)',
@@ -71,7 +75,7 @@
                         padding: 10
                     },
                     parsing: {
-                        xAxisKey: 'minute',
+                        xAxisKey: 'Hour',
                         yAxisKey: 'numLogs'
                     },
                     plugins: {
@@ -97,7 +101,7 @@
                         x: {
                             title: {
                                 display: true,
-                                text: 'Minute'
+                                text: 'Day'
                             }
                         },
                         y: {
@@ -109,6 +113,8 @@
                     }
                 }
             })
+
+            $('.spinner-border').hide();
         }
 
     </script>

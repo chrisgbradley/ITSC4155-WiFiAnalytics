@@ -4,95 +4,64 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - NinerFi Analytics</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    @*<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />*@
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" asp-append-version="true" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="~/js/site.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
 </head>
 
 <body>
-
-    @*START NAVBAR*@
     <header>
-        <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background-color: #046a38;">
-            <div class="container-fluid">
-
-                @*Navbar Brand*@
-                <a class="navbar-brand" href="/Index">
-                    NINERFI ANALYTICS
-                </a>
-
-                @*Toggle Button*@
-                <button class="navbar-toggler" type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#navbarSupportedContent"
-                        aria-controls="navbarSupportedContent"
-                        aria-expanded="false"
-                        aria-label="Toggle navigation">
-
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                @*Navbar Content*@
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-page="/Index">Overview</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-page="/Heatmap">Heatmap</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-page="/OneIT">OneIT</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Charts
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" asp-page="/Charts/NoOfLogEntries">Number Of Log Entries</a></li>
-                                <li><a class="dropdown-item" asp-page="/Charts/NetworkStatistics">Network Statistics</a></li>
-                                <li><a class="dropdown-item" asp-page="/Charts/ErrorTracking">Error Tracking</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" asp-page="/Charts/LogCount">Aggregate Totals of Log Entries</a></li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-page="/Datapoints">Datapoints</a>
-                        </li>
+        <nav class="mainNavigationBar">
+            <a class="nfa-brand" href="/Index">
+                <img src="~/images/ninerfibanner.png" />
+            </a>
+                
+            <ul class="navOptions u-flex u-justify-between">
+                <li class="option">
+                    <a class="" asp-page="/Index">OVERVIEW</a>
+                </li>
+                <li class="option dropdown">
+                    <button class="navbarDropdown dropdown-controller" id="analyticsNavDropdown" role="button" aria-expanded="false" onclick="navDropdownListToggle()">
+                        ANALYTICS
+                    </button>
+                    <ul id="analyticsNavDropdownOptions" class="dropdown-content u-justify-text-right" aria-labelledby="analyticsNavbarDropdown">
+                        <li class="dropdown-item"><a class="" asp-page="/Charts/NetworkStatistics">Network Statistics</a></li>
+                        <li class="dropdown-item"><a class="" asp-page="/Charts/ErrorTracking">Error Tracking</a></li>
+                        <li class="dropdown-item"><a class="" asp-page="/Charts/LogCount">Total Entries by Time</a></li>
+                        <li class="dropdown-item"><a class="" asp-page="/Charts/Heatmap">Estimated Campus Heatmap</a></li>
+                        <li class="dropdown-item"><a class="" asp-page="/Charts/TrafficPerBuilding">Traffic by Building</a></li>
                     </ul>
-                    <form class="d-flex">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-outline-success" type="submit">Search</button>
-                    </form>
-                </div>
-
-            </div>
+                </li>
+            </ul>
         </nav>
     </header>
-    @*END NAVBAR*@
+    <span class="accent-border"></span>
+    
 
-    @*START MAIN CONTENT*@
-    <div>
-        <main role="main">
-            @RenderBody()
-        </main>
-    </div>
-    @*END MAIN CONTENT*@
+    
+    <main role="main">
+        @RenderBody()
+    </main>
+    
 
-    @*START FOOTER*@
-    <footer class="bg-dark text center text-white">
-        <div class="container-fluid">
+    
+    <footer class="">
+        <div class="">
             &copy; NinerFi Analytics
         </div>
     </footer>
-    @*END FOOTER*@
+    
 
-    @*START BOOTSTRAP*@
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    @*<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>*@
 
     @await RenderSectionAsync("Scripts", required: false)
-    @*END BOOTSTRAP*@
 </body>
 </html>

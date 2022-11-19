@@ -1,18 +1,155 @@
-html {
-  font-size: 14px;
+@font-face {
+    font-family: 'Trade Gothic LT Std';
+    src: url('/fonts/TradeGothicLTStd-Bold.woff2') format('woff2'), url('/fonts/TradeGothicLTStd-Bold.woff') format('woff'), url('/fonts/TradeGothicLTStd-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
 }
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+:root {
+    --brand-uncc-green: #005035;
+    --brand-uncc-tan: #A39665;
 }
 
-html {
-  position: relative;
-  min-height: 100%;
+html, body {
+    height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.background {
+    background: url("/images/campus.jpg");
+    min-height: 100vh;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+* {
+    font-family: 'Open Sans',Arial,sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Trade Gothic LT Std', Arial, sans-serif;
+    font-weight: bold;
+    font-style: normal;
+}
+
+header {
+    background: var(--brand-uncc-green);
+    color: white;
+    font-size: 1.25em;
+    width: 100%;
+}
+
+
+main {
+    width: 100%;
+    flex: 1 1 auto;
+}
+
+footer {
+
+}
+
+header ul, li, button, a {
+    list-style: none;
+    color: white;
+    text-decoration: none;
+    padding: 0;
+    margin: 0;
+    font-family: 'Trade Gothic LT Std', Arial, sans-serif;
+    font-weight: bold;
+    font-size: .95em;
+    font-style: normal;
+}
+
+.mainNavigationBar {
+    position: relative;
+    max-width: 680px;
+    margin: auto;
+}
+
+.u-flex {
+    display: flex;
+    flex-direction: row;
+}
+
+.u-flex.u-justify-between {
+    justify-content:space-between;
+}
+
+.u-justify-text-right {
+}
+
+.navOptions .option {
+    padding: 1.5em 2.25em;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.navbarDropdown {
+    background: none;
+    text-decoration:none;
+    border: none;
+    color: white;
+    display:inline-block;
+    cursor: pointer;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 75px;
+    min-width: 225px;
+    background-color: #f1f1f1;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content > .dropdown-item > a {
+    color: var(--brand-uncc-green);
+    padding: 1em .5em;
+    display:block;
+
+}
+
+.u-show {
+    display: block;
+}
+
+.nfa-brand {
+    position: absolute;
+    left:50%;
+    transform: translateX(-50%);
+    text-align: center;
+}
+
+.nfa-brand img {
+    height: 200px;
+}
+
+.hero-image {
+    background-image: url("/images/campus.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 500px;
+    width: 100%;
+    z-index: -10;
+    border-bottom: var(--brand-uncc-green) solid 20px;
+}
+
+.accent-border {
+    display:block;
+    border-bottom: var(--brand-uncc-tan) solid 3px;
 }
