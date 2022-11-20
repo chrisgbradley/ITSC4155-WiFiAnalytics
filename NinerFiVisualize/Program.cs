@@ -5,6 +5,8 @@ using NinerFiVisualize.Data.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddHostedService<TimedCacheRefreshService>();
+
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddDbContext<NINERFIContext>(

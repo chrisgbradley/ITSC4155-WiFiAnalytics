@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "2Snx4n/idG+L6xsS2G+rjY5yk31iFVwv8xEaf17n7NQ=",
+  "Hash": "h7Da13HPoPvGXNXyQNFvdub6/PmTrkpzHQIAVb44lB4=",
   "Source": "NinerFiVisualize",
   "BasePath": "_content/NinerFiVisualize",
   "Mode": "Default",
@@ -187,6 +187,23 @@
       "OriginalItemSpec": "wwwroot\\images\\file_download_icon.svg"
     },
     {
+      "Identity": "C:\\Users\\christianb\\source\\repos\\NinerFiVisualize\\NinerFiVisualize\\wwwroot\\images\\line-accent.svg",
+      "SourceId": "NinerFiVisualize",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\christianb\\source\\repos\\NinerFiVisualize\\NinerFiVisualize\\wwwroot\\",
+      "BasePath": "_content/NinerFiVisualize",
+      "RelativePath": "images/line-accent.svg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\line-accent.svg"
+    },
+    {
       "Identity": "C:\\Users\\christianb\\source\\repos\\NinerFiVisualize\\NinerFiVisualize\\wwwroot\\images\\logo.png",
       "SourceId": "NinerFiVisualize",
       "SourceType": "Discovered",
@@ -236,6 +253,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\images\\wifi.png"
+    },
+    {
+      "Identity": "C:\\Users\\christianb\\source\\repos\\NinerFiVisualize\\NinerFiVisualize\\wwwroot\\images\\wifiicon.svg",
+      "SourceId": "NinerFiVisualize",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\christianb\\source\\repos\\NinerFiVisualize\\NinerFiVisualize\\wwwroot\\",
+      "BasePath": "_content/NinerFiVisualize",
+      "RelativePath": "images/wifiicon.svg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\wifiicon.svg"
     },
     {
       "Identity": "C:\\Users\\christianb\\source\\repos\\NinerFiVisualize\\NinerFiVisualize\\wwwroot\\js\\dataPoints.js",

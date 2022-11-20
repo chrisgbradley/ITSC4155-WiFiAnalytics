@@ -7,6 +7,7 @@ namespace NinerFiVisualize.Controllers
     public class ChartsController : Controller
     {
         public ChartsService _chartService;
+
         public ChartsController(ChartsService chartService)
         {
             _chartService = chartService;
