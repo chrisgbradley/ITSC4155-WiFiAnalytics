@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 using NinerFiVisualize.Data.Services;
 
 namespace NinerFiVisualize.Controllers
@@ -6,11 +8,19 @@ namespace NinerFiVisualize.Controllers
     [Route("api/[controller]")]
     public class ChartsController : Controller
     {
-        public ChartsService _chartService;
+        private const string chartCacheKey = "employeeList";
 
-        public ChartsController(ChartsService chartService)
+        private ChartsService _chartService;
+        private IMemoryCache _cache;
+        private ILogger<ChartsController> _logger;
+
+        public ChartsController(ChartsService chartService, 
+                                IMemoryCache cache, 
+                                ILogger<ChartsController> logger)
         {
-            _chartService = chartService;
+            _chartService = chartService ?? throw new ArgumentNullException(nameof(chartService));
+            _cache = cache ?? throw new ArgumentNullException(nameof(cache));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         [HttpGet("get-error-tracking")]

@@ -1,13 +1,17 @@
-﻿using NinerFiVisualize.Data.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
+using NinerFiVisualize.Data.Models;
 
 namespace NinerFiVisualize.Data.Services
 {
     public class ChartsService
     {
         private NINERFIContext _context;
+
+
         public ChartsService(NINERFIContext context)
         {
-            _context = context;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         public List<VwErrorTracking> GetErrorTrackingView()
@@ -26,8 +30,8 @@ namespace NinerFiVisualize.Data.Services
             IOrderedQueryable<VwLogCount> query;
 
             query = from view in _context.VwLogCounts
-                        orderby view.Year, view.Month, view.Day, view.Hour
-                        select view;
+                    orderby view.Year, view.Month, view.Day, view.Hour
+                    select view;
 
             return query.ToList();
         }
