@@ -22,10 +22,10 @@
             </a>
                 
             <ul class="navOptions u-flex u-justify-between">
-                <li class="option">
+                <li class="option separator-accent-right">
                     <a class="" asp-page="/Index">OVERVIEW</a>
                 </li>
-                <li class="option dropdown">
+                <li class="option separator-accent-left dropdown">
                     <button class="navbarDropdown dropdown-controller" id="analyticsNavDropdown" role="button" aria-expanded="false" onclick="navDropdownListToggle()">
                         ANALYTICS
                     </button>
@@ -47,9 +47,10 @@
     <main role="main">
         @RenderBody()
     </main>
-    
 
-    
+
+
+    <span class="accent-border"></span>
     <footer class="">
         <div class="">
             &copy; NinerFi Analytics

@@ -8,7 +8,9 @@
 
 :root {
     --brand-uncc-green: #005035;
+    --brand-uncc-green-rgb: 0, 80, 53;
     --brand-uncc-tan: #A39665;
+    --brand-uncc-tan-rgb: 163, 150, 101;
 }
 
 html, body {
@@ -20,6 +22,7 @@ body {
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
+    background-color: var(--brand-uncc-green);
 }
 
 .background {
@@ -44,6 +47,9 @@ header {
     color: white;
     font-size: 1.25em;
     width: 100%;
+    height:75px;
+    position: fixed;
+    border-bottom: var(--brand-uncc-tan) solid 3px;
 }
 
 
@@ -53,7 +59,11 @@ main {
 }
 
 footer {
-
+    background: var(--brand-uncc-green);
+    color: white;
+    width: 100%;
+    padding: 10px 0;
+    text-align: center;
 }
 
 header ul, li, button, a {
@@ -86,8 +96,30 @@ header ul, li, button, a {
 .u-justify-text-right {
 }
 
+.navOptions {
+}
+
 .navOptions .option {
     padding: 1.5em 2.25em;
+    position: relative;
+}
+
+.navOptions .separator-accent-right::after {
+    content: '';
+    position: absolute;
+    border-right: 2px solid white;
+    height: 30px;
+    right: -20px;
+    top: 23px;
+}
+
+.navOptions .separator-accent-left::before{
+    content: '';
+    position: absolute;
+    border-right: 2px solid white;
+    height: 30px;
+    left: -20px;
+    top: 23px;
 }
 
 .dropdown {
@@ -135,21 +167,96 @@ header ul, li, button, a {
 }
 
 .nfa-brand img {
-    height: 200px;
+    height: 150px;
+}
+
+.hero {
+    height: 728px; /* hero-image height + hero-image border thickness*/
+    width: 100%;
 }
 
 .hero-image {
+    position:fixed;
+    top:0;
+    left:0;
     background-image: url("/images/campus.jpg");
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-    height: 500px;
+    height: 725px; /* header height  + hero height */
     width: 100%;
     z-index: -10;
-    border-bottom: var(--brand-uncc-green) solid 20px;
+    border-bottom: var(--brand-uncc-tan) solid 3px;
 }
 
 .accent-border {
-    display:block;
-    border-bottom: var(--brand-uncc-tan) solid 3px;
+    width: 100%;
+    display: block;
+    border-bottom: 3px solid var(--brand-uncc-tan);
+}
+
+.content-wrapper {
+    max-width:1024px;
+    margin: 0 auto;
+}
+
+.project-overview {
+    background-color: rgba(var(--brand-uncc-green-rgb), 0.8);
+    color: white;
+    padding: 40px 0;
+    position:relative;
+}
+
+.line-accent {
+    position: fixed;
+    width: 100%;
+    z-index: -10;
+}
+
+.project-overview h3,
+.project-overview h4,
+.project-overview h5,
+.project-overview h6,
+.project-overview p, 
+.project-overview li {
+    line-height: 1.75em;
+}
+
+.po-content-title {
+    padding: 0 24px;
+}
+
+.po-content-title > h1 {
+    font-size: 4em;
+}
+
+.po-content-title > h2 {
+    font-size: 3em;
+}
+
+.project-overview h3 {
+    font-size: 1.45em;
+}
+
+.project-overview p,
+.project-overview li {
+    font-size: 1.15em;
+}
+
+.abstract-wrapper {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.po-content-abstract {
+    max-width: 500px;
+    padding: 0 24px;
+}
+
+.po-content-techstack {
+    padding: 0 24px;
+}
+
+.po-content-techstack .stacklist {
+    padding: 0;
 }
