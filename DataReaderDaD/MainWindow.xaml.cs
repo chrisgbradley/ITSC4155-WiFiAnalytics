@@ -161,6 +161,8 @@ namespace DataReaderDaD
             ulong reportIntervalInBytes = 131072;
             int linesCount = 0;
 
+            //  Break this into two Parallel.ForEach loop?  One for Storing files and the other for sending 
+            //  to the database (11/22/22).
             Stopwatch sw = Stopwatch.StartNew();
             Parallel.ForEach(filesThatWereDropped, new ParallelOptions { MaxDegreeOfParallelism = 4 }, file =>
             {
@@ -179,6 +181,7 @@ namespace DataReaderDaD
 
                 using (StreamReader reader = new StreamReader(file.FullName, Encoding.UTF8, true, BufferSize))
                 {
+                    //  Move this outside of the Parallel.ForEach loop? (11/22/22)
                     List<LogEntry> lines = new List<LogEntry>();
 
                     while (reader.Peek() >= 0) // until end of file
@@ -225,6 +228,7 @@ namespace DataReaderDaD
                             lines.Add(entry);
                         }
 
+                        //  Not sure what to do with these if statements. (11/22/22)
                         // only report progress if reportInterval has been passed
                         if (bytesReadSoFar - bytesLastReportedAt > reportIntervalInBytes)
                         {
@@ -239,9 +243,19 @@ namespace DataReaderDaD
                             lines.Clear();
                         }
                     }
+                    //  Roughly the area to make a separate Parallel.ForEach Loop? (11/22/22)
                     addToDatabase(lines);
                 }
             });
+
+            /*
+            
+            Parallel.ForEach(filesThatWereDropped, new ParallelOptions { MaxDegreeOfParallelism = 4 }, file =>
+            {
+                addToDatabase(?);
+            });
+             
+             */
 
             sw.Stop();
 
@@ -283,7 +297,8 @@ namespace DataReaderDaD
         {
             string connString;
 
-            connString = @"Server=localhost; Database=NINERFISTAGING; Integrated Security=True";
+            ///connString = @"Server=localhost; Database=NINERFISTAGING; Integrated Security=True";
+            connString = @"Server=localhost; Database=NINERFISTAGINGTEST; Integrated Security=True";
 
             // SEE BOTTOM FOR BLOCK
 
