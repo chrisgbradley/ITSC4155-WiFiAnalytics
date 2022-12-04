@@ -11,7 +11,9 @@
           "Microsoft.EntityFrameworkCore": "6.0.5",
           "Microsoft.EntityFrameworkCore.SqlServer": "6.0.5",
           "Microsoft.EntityFrameworkCore.Tools": "6.0.5",
-          "Microsoft.Extensions.Caching.Memory": "6.0.1"
+          "Microsoft.Extensions.Caching.Memory": "6.0.1",
+          "Microsoft.Extensions.Caching.SqlServer": "6.0.5",
+          "NeoSmart.Caching.Sqlite": "6.0.1"
         },
         "runtime": {
           "NinerFiVisualize.dll": {}
@@ -81,6 +83,17 @@
             "rid": "win-x86",
             "assetType": "native",
             "fileVersion": "2.1.1.0"
+          }
+        }
+      },
+      "Microsoft.Data.Sqlite.Core/6.0.1": {
+        "dependencies": {
+          "SQLitePCLRaw.core": "2.0.7"
+        },
+        "runtime": {
+          "lib/net6.0/Microsoft.Data.Sqlite.dll": {
+            "assemblyVersion": "6.0.1.0",
+            "fileVersion": "6.0.121.56712"
           }
         }
       },
@@ -168,6 +181,19 @@
           "lib/netstandard2.0/Microsoft.Extensions.Caching.Memory.dll": {
             "assemblyVersion": "6.0.0.0",
             "fileVersion": "6.0.222.6406"
+          }
+        }
+      },
+      "Microsoft.Extensions.Caching.SqlServer/6.0.5": {
+        "dependencies": {
+          "Microsoft.Data.SqlClient": "2.1.4",
+          "Microsoft.Extensions.Caching.Abstractions": "6.0.0",
+          "Microsoft.Extensions.Options": "6.0.0"
+        },
+        "runtime": {
+          "lib/net6.0/Microsoft.Extensions.Caching.SqlServer.dll": {
+            "assemblyVersion": "6.0.5.0",
+            "fileVersion": "6.0.522.21802"
           }
         }
       },
@@ -294,6 +320,135 @@
           }
         }
       },
+      "NeoSmart.Caching.Sqlite/6.0.1": {
+        "dependencies": {
+          "Microsoft.Data.Sqlite.Core": "6.0.1",
+          "Microsoft.Extensions.Caching.Abstractions": "6.0.0",
+          "Microsoft.Extensions.Logging.Abstractions": "6.0.0",
+          "Microsoft.Extensions.Options": "6.0.0",
+          "SQLitePCLRaw.bundle_green": "2.0.7"
+        },
+        "runtime": {
+          "lib/net6.0/NeoSmart.Caching.Sqlite.dll": {
+            "assemblyVersion": "6.0.1.0",
+            "fileVersion": "6.0.1.0"
+          }
+        }
+      },
+      "SQLitePCLRaw.bundle_green/2.0.7": {
+        "dependencies": {
+          "SQLitePCLRaw.core": "2.0.7",
+          "SQLitePCLRaw.lib.e_sqlite3": "2.0.7",
+          "SQLitePCLRaw.provider.e_sqlite3": "2.0.7"
+        },
+        "runtime": {
+          "lib/netstandard2.0/SQLitePCLRaw.batteries_v2.dll": {
+            "assemblyVersion": "2.0.7.1395",
+            "fileVersion": "2.0.7.1395"
+          }
+        }
+      },
+      "SQLitePCLRaw.core/2.0.7": {
+        "dependencies": {
+          "System.Memory": "4.5.3"
+        },
+        "runtime": {
+          "lib/netstandard2.0/SQLitePCLRaw.core.dll": {
+            "assemblyVersion": "2.0.7.1395",
+            "fileVersion": "2.0.7.1395"
+          }
+        }
+      },
+      "SQLitePCLRaw.lib.e_sqlite3/2.0.7": {
+        "runtimeTargets": {
+          "runtimes/alpine-x64/native/libe_sqlite3.so": {
+            "rid": "alpine-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/linux-arm/native/libe_sqlite3.so": {
+            "rid": "linux-arm",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/linux-arm64/native/libe_sqlite3.so": {
+            "rid": "linux-arm64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/linux-armel/native/libe_sqlite3.so": {
+            "rid": "linux-armel",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/linux-mips64/native/libe_sqlite3.so": {
+            "rid": "linux-mips64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/linux-musl-x64/native/libe_sqlite3.so": {
+            "rid": "linux-musl-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/linux-s390x/native/libe_sqlite3.so": {
+            "rid": "linux-s390x",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/linux-x64/native/libe_sqlite3.so": {
+            "rid": "linux-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/linux-x86/native/libe_sqlite3.so": {
+            "rid": "linux-x86",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/osx-arm64/native/libe_sqlite3.dylib": {
+            "rid": "osx-arm64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/osx-x64/native/libe_sqlite3.dylib": {
+            "rid": "osx-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-arm/native/e_sqlite3.dll": {
+            "rid": "win-arm",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-arm64/native/e_sqlite3.dll": {
+            "rid": "win-arm64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x64/native/e_sqlite3.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x86/native/e_sqlite3.dll": {
+            "rid": "win-x86",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "SQLitePCLRaw.provider.e_sqlite3/2.0.7": {
+        "dependencies": {
+          "SQLitePCLRaw.core": "2.0.7"
+        },
+        "runtime": {
+          "lib/net5.0/SQLitePCLRaw.provider.e_sqlite3.dll": {
+            "assemblyVersion": "2.0.7.1395",
+            "fileVersion": "2.0.7.1395"
+          }
+        }
+      },
       "System.Collections.Immutable/6.0.0": {
         "dependencies": {
           "System.Runtime.CompilerServices.Unsafe": "6.0.0"
@@ -354,6 +509,7 @@
           }
         }
       },
+      "System.Memory/4.5.3": {},
       "System.Runtime.Caching/4.7.0": {
         "dependencies": {
           "System.Configuration.ConfigurationManager": "4.7.0"
@@ -470,6 +626,13 @@
       "path": "microsoft.data.sqlclient.sni.runtime/2.1.1",
       "hashPath": "microsoft.data.sqlclient.sni.runtime.2.1.1.nupkg.sha512"
     },
+    "Microsoft.Data.Sqlite.Core/6.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Z8MIjWmzxUjcc2HKTKFHfo7jqqVeVftkigrojGY4zEN8OwjLgJNb5/BqW3J2FiIiCrPBDGNkiVlOERazGfLizg==",
+      "path": "microsoft.data.sqlite.core/6.0.1",
+      "hashPath": "microsoft.data.sqlite.core.6.0.1.nupkg.sha512"
+    },
     "Microsoft.EntityFrameworkCore/6.0.5": {
       "type": "package",
       "serviceable": true,
@@ -532,6 +695,13 @@
       "sha512": "sha512-B4y+Cev05eMcjf1na0v9gza6GUtahXbtY1JCypIgx3B4Ea/KAgsWyXEmW4q6zMbmTMtKzmPVk09rvFJirvMwTg==",
       "path": "microsoft.extensions.caching.memory/6.0.1",
       "hashPath": "microsoft.extensions.caching.memory.6.0.1.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Caching.SqlServer/6.0.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-udXVml/o3+N+qB+8rrUQVLV6QuGvX7ZUCZWyr4JMVkuEPFQgfdRm21EIVEQ6SaUTKfQz+U6TBSdRyF+rxogDVg==",
+      "path": "microsoft.extensions.caching.sqlserver/6.0.5",
+      "hashPath": "microsoft.extensions.caching.sqlserver.6.0.5.nupkg.sha512"
     },
     "Microsoft.Extensions.Configuration.Abstractions/6.0.0": {
       "type": "package",
@@ -645,6 +815,41 @@
       "path": "microsoft.win32.systemevents/4.7.0",
       "hashPath": "microsoft.win32.systemevents.4.7.0.nupkg.sha512"
     },
+    "NeoSmart.Caching.Sqlite/6.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-sdvll5AfcKWvWE4TC9dU4dOuxQs+HoeSAI9k7eLvhgzKdBbOwchjLxvHSx1PlY4TF9n7gWgT0+S5CVaLb7HYLw==",
+      "path": "neosmart.caching.sqlite/6.0.1",
+      "hashPath": "neosmart.caching.sqlite.6.0.1.nupkg.sha512"
+    },
+    "SQLitePCLRaw.bundle_green/2.0.7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-VKu0nUqJwJZNTaT01jE2jAav5G46wVDmLCKcyILLRy5TdB3EBKA+iZL7Q8hVY93atNKmYLcDfUsB67OtI70Egg==",
+      "path": "sqlitepclraw.bundle_green/2.0.7",
+      "hashPath": "sqlitepclraw.bundle_green.2.0.7.nupkg.sha512"
+    },
+    "SQLitePCLRaw.core/2.0.7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-2z+PXZqmwC8K+/4imlqAXBaDYlbkMfNvmDhuTIuJHPsbT9mG1HJcOsRa/Mx7DUiwgIXSj8yXbkjZ6jKHeE6PJQ==",
+      "path": "sqlitepclraw.core/2.0.7",
+      "hashPath": "sqlitepclraw.core.2.0.7.nupkg.sha512"
+    },
+    "SQLitePCLRaw.lib.e_sqlite3/2.0.7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-EN8CCTFbPbRZHxStep7VF87O3AXSWB7V3P6rGLesZEMN2QKoxniS8i/ADvUgbt3EyvFyKFkC9HXN2tYCggBsdQ==",
+      "path": "sqlitepclraw.lib.e_sqlite3/2.0.7",
+      "hashPath": "sqlitepclraw.lib.e_sqlite3.2.0.7.nupkg.sha512"
+    },
+    "SQLitePCLRaw.provider.e_sqlite3/2.0.7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-wxhYdl+ijzHpvG+pWXHH+oQHEobiybYEG65yufsljcSs+eLMTAYQhVrBwcNySgfIPY0shEKxTOxep4StexKBww==",
+      "path": "sqlitepclraw.provider.e_sqlite3/2.0.7",
+      "hashPath": "sqlitepclraw.provider.e_sqlite3.2.0.7.nupkg.sha512"
+    },
     "System.Collections.Immutable/6.0.0": {
       "type": "package",
       "serviceable": true,
@@ -679,6 +884,13 @@
       "sha512": "sha512-5tBCjAub2Bhd5qmcd0WhR5s354e4oLYa//kOWrkX+6/7ZbDDJjMTfwLSOiZ/MMpWdE4DWPLOfTLOq/juj9CKzA==",
       "path": "system.identitymodel.tokens.jwt/6.8.0",
       "hashPath": "system.identitymodel.tokens.jwt.6.8.0.nupkg.sha512"
+    },
+    "System.Memory/4.5.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-3oDzvc/zzetpTKWMShs1AADwZjQ/36HnsufHRPcOjyRAAMLDlu2iD33MBI2opxnezcVUtXyqDXXjoFMOU9c7SA==",
+      "path": "system.memory/4.5.3",
+      "hashPath": "system.memory.4.5.3.nupkg.sha512"
     },
     "System.Runtime.Caching/4.7.0": {
       "type": "package",

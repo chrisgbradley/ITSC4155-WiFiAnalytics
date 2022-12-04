@@ -8,6 +8,11 @@
       "type": "mssql.onprem",
       "connectionId": "ConnectionStrings:NINERFI",
       "dynamicId": null
+    },
+    "mssql2": {
+      "secretStore": "LocalSecretsFile",
+      "type": "mssql.onprem",
+      "connectionId": "ConnectionStrings:DistCache"
     }
   }
 }

@@ -7,6 +7,10 @@
       "type": "mssql",
       "connectionId": "ConnectionStrings:NINERFI",
       "dynamicId": null
+    },
+    "mssql2": {
+      "type": "mssql",
+      "connectionId": "ConnectionStrings:DistCache"
     }
   }
 }

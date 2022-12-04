@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using NinerFiVisualize.Data.Models;
+using NinerFiVisualize.API.Data.Models;
 
-namespace NinerFiVisualize.Data
+namespace NinerFiVisualize.API.Data
 {
     public partial class NINERFIContext : DbContext
     {
@@ -30,6 +30,7 @@ namespace NinerFiVisualize.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
             modelBuilder.Entity<VwErrorTracking>(entity =>
             {
                 entity.HasNoKey();

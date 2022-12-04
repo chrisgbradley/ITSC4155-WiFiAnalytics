@@ -10,15 +10,15 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <script src="~/js/site.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 
 <body>
-    <header>
+    <header class="">
         <nav class="mainNavigationBar">
             <a class="nfa-brand" href="/Index">
-                <img src="~/images/ninerfibanner.png" />
+                <img class="ninerfibanner" src="~/images/ninerfibanner.png" />
+                <img class="wifiicon" src="~/images/wifiicon.svg" />
             </a>
                 
             <ul class="navOptions u-flex u-justify-between">
@@ -40,7 +40,6 @@
             </ul>
         </nav>
     </header>
-    <span class="accent-border"></span>
     
 
     
@@ -59,8 +58,9 @@
     
 
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/site.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     @*<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>*@
 
     @await RenderSectionAsync("Scripts", required: false)

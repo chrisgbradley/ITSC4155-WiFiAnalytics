@@ -5,7 +5,7 @@
     ViewData["Title"] = "Log Count";
 }
 
-<div class="p-4">
+<div class="chart">
     <h2>Log Count</h2>
 
     <div class="text-center">
@@ -50,18 +50,18 @@
             console.log(response);
             const ctx = document.getElementById('logsChart');
 
-            const filtered = d3.rollup(response, v => d3.sum(v, d => d.numberOfLogs), d => d.day);
-            
+            const filtered = d3.rollup(response, v => d3.sum(v, d => d.numberOfLogs), d=>d.month, d => d.day, d=>d.hour);
+
 
             //create chart
             const logsChart = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: Array.from(filtered.keys()),
+                    labels: unroll(filtered,["month", "day", "hour"], "numberOfLogs").map((el, index) => index),
                     datasets: [
                         {
                             label: 'Number of Log Entries',
-                            data: Array.from(filtered.values()),
+                            data: unroll(filtered,["month", "day", "hour"], "numberOfLogs").map(({numberOfLogs}) => numberOfLogs),
                             fill: false,
                             backgroundColor: 'rgba(1, 80, 53, 1)',
                             borderColor: 'rgba(1, 80, 53, 0.3)',
@@ -115,6 +115,14 @@
             })
 
             $('.spinner-border').hide();
+        }
+
+        function unroll(rollup, keys, label = "value", p = {}) {
+          return Array.from(rollup, ([key, value]) =>
+            value instanceof Map
+              ? unroll(value, keys.slice(1), label, Object.assign({}, { ...p, [keys[0]]: key } ))
+              : Object.assign({}, { ...p, [keys[0]]: key, [label] : value })
+          ).flat();
         }
 
     </script>

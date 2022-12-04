@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "h7Da13HPoPvGXNXyQNFvdub6/PmTrkpzHQIAVb44lB4=",
+  "Hash": "rpylHDXDMJyO2kyYtMiAK/JJ9H/VlZ6HZ+ct2AIt4Zg=",
   "Source": "NinerFiVisualize",
   "BasePath": "_content/NinerFiVisualize",
   "Mode": "Default",
@@ -321,6 +321,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\js\\networkChart.js"
+    },
+    {
+      "Identity": "C:\\Users\\christianb\\source\\repos\\NinerFiVisualize\\NinerFiVisualize\\wwwroot\\js\\projectoverview.js",
+      "SourceId": "NinerFiVisualize",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\christianb\\source\\repos\\NinerFiVisualize\\NinerFiVisualize\\wwwroot\\",
+      "BasePath": "_content/NinerFiVisualize",
+      "RelativePath": "js/projectoverview.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\projectoverview.js"
     },
     {
       "Identity": "C:\\Users\\christianb\\source\\repos\\NinerFiVisualize\\NinerFiVisualize\\wwwroot\\js\\site.js",

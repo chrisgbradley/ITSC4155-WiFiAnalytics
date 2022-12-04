@@ -1,21 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
-using NinerFiVisualize.Data.Services;
+using NinerFiVisualize.API.Data.Services;
 
 namespace NinerFiVisualize.Controllers
 {
     [Route("api/[controller]")]
     public class ChartsController : Controller
     {
-        private const string chartCacheKey = "employeeList";
-
         private ChartsService _chartService;
-        private IMemoryCache _cache;
+        private readonly IDistributedCache _cache;
         private ILogger<ChartsController> _logger;
 
-        public ChartsController(ChartsService chartService, 
-                                IMemoryCache cache, 
+        public ChartsController(ChartsService chartService,
+                                IDistributedCache cache, 
                                 ILogger<ChartsController> logger)
         {
             _chartService = chartService ?? throw new ArgumentNullException(nameof(chartService));

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace NinerFiVisualize.Data.Models
+namespace NinerFiVisualize.API.Data.Models
 {
     public partial class VwErrorTracking
     {

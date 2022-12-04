@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
-using NinerFiVisualize.Data.Models;
+using NinerFiVisualize.API.Data;
+using NinerFiVisualize.API.Data.Models;
 
-namespace NinerFiVisualize.Data.Services
+namespace NinerFiVisualize.API.Data.Services
 {
     public class ChartsService
     {

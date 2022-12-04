@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 
-namespace NinerFiVisualize.Data.Services
+namespace NinerFiVisualize.API.Data.Services
 {
     public class TimedCacheRefreshService : BackgroundService, IDisposable
     {
@@ -34,7 +34,7 @@ namespace NinerFiVisualize.Data.Services
             while (!cancellationToken.IsCancellationRequested)
             {
                 DoWork(null);
-                await Task.Delay(QUERY_INTERVAL.Milliseconds);
+                await Task.Delay(Convert.ToInt32(QUERY_INTERVAL.TotalMilliseconds));
             }
         }
     }

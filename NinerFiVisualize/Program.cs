@@ -1,11 +1,19 @@
 using Microsoft.EntityFrameworkCore;
-using NinerFiVisualize.Data;
-using NinerFiVisualize.Data.Services;
-
+using NinerFiVisualize.API.Data;
+using NinerFiVisualize.API.Data.Services;
+using Microsoft.Extensions.Caching.Distributed;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddHostedService<TimedCacheRefreshService>();
+builder.Services.AddDistributedSqlServerCache(options =>
+{
+    options.ConnectionString = builder.Configuration.GetConnectionString("DistCache");
+    options.SchemaName = "dbo";
+    options.TableName = "TestCache";
+});
+
+builder.Services.AddMvc();
 
 // Add services to the container.
 builder.Services.AddRazorPages();
@@ -23,6 +31,7 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
