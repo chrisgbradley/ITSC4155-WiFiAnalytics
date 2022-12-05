@@ -10,6 +10,6 @@ namespace NinerFiVisualize.API.Data.Models
         public int? Day { get; set; }
         public string? Hostname { get; set; }
         public string TypeName { get; set; } = null!;
-        public int? LogEntries { get; set; }
+        public long? LogEntries { get; set; }
     }
 }
