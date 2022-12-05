@@ -3,16 +3,16 @@
     "secrets1": {
       "type": "secrets.user"
     },
-    "mssql1": {
-      "secretStore": "LocalSecretsFile",
-      "type": "mssql.onprem",
-      "connectionId": "ConnectionStrings:NINERFI",
-      "dynamicId": null
-    },
     "mssql2": {
       "secretStore": "LocalSecretsFile",
       "type": "mssql.onprem",
       "connectionId": "ConnectionStrings:DistCache"
+    },
+    "mssql1": {
+      "secretStore": "LocalSecretsFile",
+      "resourceId": null,
+      "type": "mssql.onprem",
+      "connectionId": "ConnectionStrings:NINERFI"
     }
   }
 }
