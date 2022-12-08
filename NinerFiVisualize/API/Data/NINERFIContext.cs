@@ -17,8 +17,9 @@ namespace NinerFiVisualize.API.Data
         {
         }
 
-        public virtual DbSet<VwErrorTracking> VwErrorTrackings { get; set; } = null!;
-        public virtual DbSet<VwLogCount> VwLogCounts { get; set; } = null!;
+        public virtual DbSet<VwErrorTracking> VwErrorTracking { get; set; } = null!;
+        public virtual DbSet<VwLogCount> VwLogCount { get; set; } = null!;
+        public virtual DbSet<VwTrafficStats> VwTrafficStats { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -30,14 +31,15 @@ namespace NinerFiVisualize.API.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
             modelBuilder.Entity<VwErrorTracking>(entity =>
             {
                 entity.HasNoKey();
 
-                entity.ToView("vw_error_tracking");
+                entity.ToView("vwErrorTracking");
 
-                entity.Property(e => e.Hostname).HasMaxLength(4);
+                entity.Property(e => e.Hostname)
+                    .HasMaxLength(50)
+                    .IsFixedLength();
 
                 entity.Property(e => e.LogEntries).HasColumnName("log_entries");
 
@@ -50,9 +52,22 @@ namespace NinerFiVisualize.API.Data
             {
                 entity.HasNoKey();
 
-                entity.ToView("vw_LogCount");
+                entity.ToView("vwLogCount");
 
                 entity.Property(e => e.NumberOfLogs).HasColumnName("number_of_logs");
+            });
+
+            modelBuilder.Entity<VwTrafficStats>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("vwTrafficStats");
+
+                entity.Property(e => e.Hostname)
+                    .HasMaxLength(50)
+                    .IsFixedLength();
+
+                entity.Property(e => e.LogEntries).HasColumnName("log_entries");
             });
 
             OnModelCreatingPartial(modelBuilder);

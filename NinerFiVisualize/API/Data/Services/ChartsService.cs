@@ -19,7 +19,7 @@ namespace NinerFiVisualize.API.Data.Services
         {
             IOrderedQueryable<VwErrorTracking> query;
 
-            query = from view in _context.VwErrorTrackings
+            query = from view in _context.VwErrorTracking
                     orderby view.Year, view.Month, view.Day
                     select view;
 
@@ -30,8 +30,18 @@ namespace NinerFiVisualize.API.Data.Services
         {
             IOrderedQueryable<VwLogCount> query;
 
-            query = from view in _context.VwLogCounts
+            query = from view in _context.VwLogCount
                     orderby view.Year, view.Month, view.Day, view.Hour
+                    select view;
+
+            return query.ToList();
+        }
+        public List<VwTrafficStats> GetTrafficStatsView()
+        {
+            IOrderedQueryable<VwTrafficStats> query;
+
+            query = from view in _context.VwTrafficStats
+                    orderby view.Year, view.Month, view.Day, view.Hostname
                     select view;
 
             return query.ToList();

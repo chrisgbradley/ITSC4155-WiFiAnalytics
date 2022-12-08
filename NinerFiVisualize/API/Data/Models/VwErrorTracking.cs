@@ -8,7 +8,7 @@ namespace NinerFiVisualize.API.Data.Models
         public int? Year { get; set; }
         public int? Month { get; set; }
         public int? Day { get; set; }
-        public string? Hostname { get; set; }
+        public string Hostname { get; set; } = null!;
         public string TypeName { get; set; } = null!;
         public long? LogEntries { get; set; }
     }
