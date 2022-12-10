@@ -1,0 +1,11 @@
+﻿@{
+    Layout = "./_MainLayout.cshtml";
+    ViewData["Title"] = "Charts";
+}
+<div id="charts">
+    @RenderBody()
+</div>
+
+@section Scripts {
+    @await RenderSectionAsync("Scripts", required: false)
+}

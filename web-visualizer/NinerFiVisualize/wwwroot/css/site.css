@@ -1,0 +1,379 @@
+@font-face {
+    font-family: 'Trade Gothic LT Std';
+    src: url('/fonts/TradeGothicLTStd-Bold.woff2') format('woff2'), url('/fonts/TradeGothicLTStd-Bold.woff') format('woff'), url('/fonts/TradeGothicLTStd-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+:root {
+    --brand-uncc-green: #005035;
+    --brand-uncc-green-rgb: 0, 80, 53;
+    --brand-uncc-tan: #A39665;
+    --brand-uncc-tan-rgb: 163, 150, 101;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--brand-uncc-green);
+}
+
+.background {
+    background: url("/images/campus.jpg");
+    min-height: 100vh;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+* {
+    font-family: 'Open Sans',Arial,sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Trade Gothic LT Std', Arial, sans-serif;
+    font-weight: bold;
+    font-style: normal;
+}
+
+header {
+    background: var(--brand-uncc-green);
+    color: white;
+    font-size: 1.25em;
+    width: 100%;
+    height: 75px;
+    border-bottom: var(--brand-uncc-tan) solid 3px;
+}
+
+
+header.sticky-header {
+    position: fixed;
+    top:0;
+    transition: all ease-in-out .75s
+}
+
+    header:not(.sticky-header) .ninerfibanner {
+        height: 150px;
+        transition: transform .25s ease-in;
+        transform: translateY(0);
+    }
+
+header:not(.sticky-header) .wifiicon {
+    display:none;
+}
+
+header.sticky-header .wifiicon {
+    height:45px;
+}
+
+header.sticky-header .ninerfibanner {
+    display:none;
+}
+
+    header:not(.sticky-header) .nfa-brand {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        text-align: center;
+    }
+
+header.sticky-header .nfa-brand {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    text-align: center;
+}
+
+    header:not(.sticky-header) .ninerfibanner:hover {
+        transform: translateY(10px);
+    }
+
+header.sticky-header + main {
+    margin-top:75px;
+}
+
+main {
+    width: 100%;
+    flex: 1 1 auto;
+}
+
+footer {
+    background: var(--brand-uncc-green);
+    color: white;
+    width: 100%;
+    padding: 10px 0;
+    text-align: center;
+}
+
+header ul, li, button, a {
+    list-style: none;
+    color: white;
+    text-decoration: none;
+    padding: 0;
+    margin: 0;
+    font-family: 'Trade Gothic LT Std', Arial, sans-serif;
+    font-weight: bold;
+    font-size: .95em;
+    font-style: normal;
+}
+
+.mainNavigationBar {
+    position: relative;
+    max-width: 680px;
+    margin: auto;
+}
+
+.u-flex {
+    display: flex;
+    flex-direction: row;
+}
+
+.u-flex.u-justify-between {
+    justify-content:space-between;
+}
+
+.u-justify-text-right {
+}
+
+.navOptions {
+}
+
+.navOptions .option {
+    padding: 1.5em 2.25em;
+    position: relative;
+}
+
+.navOptions .separator-accent-right::after {
+    content: '';
+    position: absolute;
+    border-right: 2px solid white;
+    height: 30px;
+    right: -20px;
+    top: 23px;
+}
+
+.navOptions .separator-accent-left::before{
+    content: '';
+    position: absolute;
+    border-right: 2px solid white;
+    height: 30px;
+    left: -20px;
+    top: 23px;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.navbarDropdown {
+    background: none;
+    text-decoration:none;
+    border: none;
+    color: white;
+    display:inline-block;
+    cursor: pointer;
+}
+
+.option > a,
+.option > button {
+    position: relative;
+    display: inline-block;
+}
+
+.option > a:hover,
+.option > a:active,
+.option > button:hover,
+.option > button:active {
+    color: var(--brand-uncc-tan);
+    transition: color 0.25s ease-out;
+}
+    
+.option > a::after,
+.option > button::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    transform: scaleX(0);
+    height: 2px;
+    bottom: -3px;
+    left: 0;
+    background-color: white;
+    transform-origin: bottom right;
+    transition: transform 0.25s ease-out;
+}
+
+
+.option > a:hover::after,
+.option > button:hover::after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+}
+
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 75px;
+    min-width: 225px;
+    background-color: #f1f1f1;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content > .dropdown-item > a {
+    color: var(--brand-uncc-green);
+    padding: 1em .5em;
+    display:block;
+
+}
+
+.u-show {
+    display: block;
+}
+
+
+
+.hero {
+    height: 653px; /* hero-image height + hero-image border thickness*/
+    width: 100%;
+}
+
+.hero.sticky-hero > .hero-image {
+    position:fixed;
+    top:0;
+    left:0;
+    background-image: url("/images/campus.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 725px; /* header height  + hero height */
+    width: 100%;
+    z-index: -10;
+    border-bottom: var(--brand-uncc-tan) solid 3px;
+}
+
+    .hero:not(.sticky-hero) > .hero-image {
+        position: absolute;
+        top: 300px;
+        left: 0;
+        background-image: url("/images/campus.jpg");
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        height: 725px; /* header height  + hero height */
+        width: 100%;
+        z-index: -10;
+        border-bottom: var(--brand-uncc-tan) solid 3px;
+    }
+
+.accent-border {
+    width: 100%;
+    display: block;
+    border-bottom: 3px solid var(--brand-uncc-tan);
+}
+
+.content-wrapper {
+    max-width:1024px;
+    margin: 0 auto;
+}
+
+.project-overview {
+    background-color: rgba(var(--brand-uncc-green-rgb), 0.8);
+    color: white;
+    padding: 40px 0;
+    position:relative;
+}
+
+.line-accent {
+    position: absolute;
+    top: 350px;
+    width: 100%;
+    z-index: -100;
+}
+
+.project-overview h3,
+.project-overview h4,
+.project-overview h5,
+.project-overview h6,
+.project-overview p, 
+.project-overview li {
+    line-height: 1.75em;
+}
+
+.po-content-title {
+    padding: 0 24px;
+}
+
+.po-content-title > h1 {
+    font-size: 4em;
+}
+
+.po-content-title > h2 {
+    font-size: 3em;
+}
+
+.project-overview h3 {
+    font-size: 1.45em;
+}
+
+.project-overview p,
+.project-overview li {
+    font-size: 1.15em;
+}
+
+.abstract-wrapper {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.po-content-abstract {
+    max-width: 500px;
+    padding: 0 24px;
+}
+
+.po-content-techstack {
+    padding: 0 24px;
+}
+
+.po-content-techstack .stacklist {
+    padding: 0;
+}
+
+#charts {
+    height: 100%;
+    background: white;
+}
+
+.chart {
+    padding: 48px 24px;
+}
+
+.pageContent {
+    padding: 50px;
+}
+
+.errorButton {
+    background-color: var(--brand-uncc-green);
+    color: white;
+    padding: 5px 10px;
+    border: none;
+}
+
+    .errorButton:hover {
+        color: var(--brand-uncc-tan);
+        cursor: pointer;
+    }
+
+    .errorButton:active {
+        transform: translateY(1px);
+    }

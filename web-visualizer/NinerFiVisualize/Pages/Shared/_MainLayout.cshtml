@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - NinerFi Analytics</title>
+    @*<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />*@
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" asp-append-version="true" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+
+<body>
+    <header class="">
+        <nav class="mainNavigationBar">
+            <a class="nfa-brand" href="/Index">
+                <img class="ninerfibanner" src="~/images/ninerfibanner.png" />
+                <img class="wifiicon" src="~/images/wifiicon.svg" />
+            </a>
+                
+            <ul class="navOptions u-flex u-justify-between">
+                <li class="option separator-accent-right">
+                    <a class="" asp-page="/Index">OVERVIEW</a>
+                </li>
+                <li class="option separator-accent-left dropdown">
+                    <button class="navbarDropdown dropdown-controller" id="analyticsNavDropdown" role="button" aria-expanded="false" onclick="navDropdownListToggle()">
+                        ANALYTICS
+                    </button>
+                    <ul id="analyticsNavDropdownOptions" class="dropdown-content u-justify-text-right" aria-labelledby="analyticsNavbarDropdown">
+                        <li class="dropdown-item"><a class="" asp-page="/Charts/ErrorTracking">Error Tracking</a></li>
+                        <li class="dropdown-item"><a class="" asp-page="/Charts/LogCount">Total Entries by Time</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    
+
+    
+    <main role="main">
+        @RenderBody()
+    </main>
+
+
+
+    <span class="accent-border"></span>
+    <footer class="">
+        <div class="">
+            &copy; NinerFi Analytics
+        </div>
+    </footer>
+    
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/site.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    @*<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>*@
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

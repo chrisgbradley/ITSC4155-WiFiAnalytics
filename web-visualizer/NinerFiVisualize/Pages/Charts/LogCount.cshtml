@@ -1,0 +1,402 @@
+﻿@page "{handler?}"
+@model NinerFiVisualize.Pages.Charts.ErrorTrackingModel
+@{
+    Layout = "../Shared/_ChartsLayout.cshtml";
+    ViewData["Title"] = "Log Count";
+}
+
+<div class="chart">
+
+    <div id="filters">
+        <select id="granularitySelected" onchange="filterChanged()">
+            <option value="day" selected>By Day</option>
+            <option value="month">By Month</option>
+            <option value="year">By Year</option>
+        </select>
+        <select id="yearSelected" onchange="filterChanged()">
+            <option value="2021" selected>2021</option>
+        </select>
+        <select id="monthSelected" onchange="filterChanged()">
+            <option value="1">January</option>
+            <option value="2">February</option>
+            <option value="3">March</option>
+        </select>
+        <select id="daySelected" onchange="filterChanged()">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+            <option value="13">13</option>
+            <option value="14">14</option>
+            <option value="15">15</option>
+            <option value="16">16</option>
+            <option value="17">17</option>
+            <option value="18">18</option>
+            <option value="19">19</option>
+            <option value="20">20</option>
+            <option value="21">21</option>
+            <option value="22">22</option>
+            <option value="23">23</option>
+            <option value="24">24</option>
+            <option value="25">25</option>
+            <option value="26">26</option>
+            <option value="27">27</option>
+            <option value="28">28</option>
+            <option value="29">29</option>
+            <option value="30">30</option>
+            <option value="31">31</option>
+        </select>
+    </div>
+
+    <h2>Log Count</h2>
+
+    <div class="text-center">
+        <div class="spinner-border text-success" style="display:none; width: 5rem; height: 5rem;" role="status" aria-label="Spinning loading indicator">
+            <!--<span class="sr-only">Loading...</span>-->
+        </div>
+    </div>
+
+    <canvas id="chartCanvas" aria-label="Log entries aggregated count by time chart" role="img"></canvas>
+    <!-- <canvas id="chartCanvas" aria-label="Log entries aggregated count by time chart" role="img" style="width: 840px; height: 480px"></canvas> -->
+
+</div>
+
+
+
+<!-- WELCOME TO JAVASCRIPT HELL -->
+
+@section Scripts
+    {
+    <script type="application/javascript">
+
+        // AJAX Call Upon Page Ready, Retrive All Data Asynchronously
+        $(document).ready(function () {
+
+            $.ajax({
+                url: '/api/charts/get-log-count',
+                type: 'GET',
+                contentType: "application/json; charset=utf-8",
+                dataType: 'json',
+                success: (data) => {
+                    responseJSON = data;
+                    dayQuery(data);
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert(xhr.status);
+                    alert(thrownError);
+                }
+            });
+        })
+
+
+        // Event Listener for Filter Change
+        // Selecters have this function in their onchange property!
+        // Rebuilds a new chart upon filter change based on selected filter options. Runs a different chart query depending on what is chosen. 
+        function filterChanged() {
+
+            logsChart.destroy();
+
+            granularity = document.getElementById("granularitySelected").value;
+
+            switch (granularity) {
+                case "day":
+                    document.getElementById("yearSelected").disabled = false;
+                    document.getElementById("monthSelected").disabled = false;
+                    document.getElementById("daySelected").disabled = false;
+                    dayQuery(responseJSON);
+                    break;
+                case "month":
+                    document.getElementById("yearSelected").disabled = false;
+                    document.getElementById("monthSelected").disabled = false;
+                    document.getElementById("daySelected").disabled = true;
+                    monthQuery(responseJSON);
+                    break;
+                case "year":
+                    document.getElementById("yearSelected").disabled = false;
+                    document.getElementById("monthSelected").disabled = true;
+                    document.getElementById("daySelected").disabled = true;
+                    yearQuery(responseJSON);
+                    break;
+            }
+        }
+
+
+        // Logs by Hour Chart Constructor
+        function dayQuery(response)
+        {
+
+
+            selectedDay = document.getElementById("daySelected").value;
+            selectedMonth = document.getElementById("monthSelected").value;
+            selectedYear = document.getElementById("yearSelected").value;
+
+            console.log("Begin Day Query");
+
+            // Filter "BEEG JSON"" into "smol JSON"" According to Filters
+            filtered = response.filter(function (d)
+                {
+                    return d.day == selectedDay && 
+                           d.month == selectedMonth && 
+                           d.year == selectedYear;
+                }
+            );
+
+            // Pull Labels from Filtered
+            var labels = filtered.map(function(d) {
+                return d.hour + 1;
+            });
+            // Pull Logs from Filtered
+            var data = filtered.map(function(d) {
+                return d.numberOfLogs;
+            });
+
+
+
+            //create chart
+            const ctx = document.getElementById('chartCanvas');
+            logsChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Total Logs',
+                            data: data,
+                            backgroundColor: "darkgreen",
+                            borderColor: "lightgrey",
+                            borderWidth: 1
+                        }
+                    ],
+                },
+                options: {
+                    responsive: true,
+                    layout: {
+                        padding: 10
+                    },
+                    parsing: {
+                        xAxisKey: 'hour',
+                        yAxisKey: 'numLogs'
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: "Aggregated Log Count by Hour on: " + selectedMonth + "/" + selectedDay + "/" + selectedYear,
+                            align: 'start',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                beforeTitle: function (context) {
+                                    return selectedMonth + "/" + selectedDay + "/" + selectedYear;
+                                },
+                                title: function (context) {
+                                    return "Hour: " + context[0].label;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Hour'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Total Logs',
+                                padding: 20
+                            }
+                        }
+                    }
+                }
+            })
+        }
+
+
+        // Logs by Day Chart Constructor 
+        function monthQuery(response)
+        {
+            selectedMonth = document.getElementById("monthSelected").value;
+            selectedYear = document.getElementById("yearSelected").value;
+
+            console.log("Begin Month Query");
+
+            // Filter "BEEG JSON"" into "smol JSON"" According to Filters
+            filtered = response.filter(function (d)
+                {
+                    return d.month == selectedMonth &&
+                           d.year == selectedYear;
+                }
+            );
+
+            // Rollup Hours into Sum of Logs per Day - THIS IS A 2D ARRAY OUTPUT!
+            rolld = d3.flatRollup(filtered, v => d3.sum(v, d => d.numberOfLogs), d => d.day);
+            console.log(rolld);
+
+            // Pull Labels from rolld
+            var labels = rolld.map(function(d) {
+                return d[0];
+            });
+            // Pull Logs from rolld
+            var data = rolld.map(function(d) {
+                return d[1];
+            });
+
+
+            //create chart
+            const ctx = document.getElementById('chartCanvas');
+            logsChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Total Logs',
+                            data: data,
+                            backgroundColor: "darkgreen",
+                            borderColor: "lightgrey",
+                            borderWidth: 1
+                        }
+                    ],
+                },
+                options: {
+                    responsive: true,
+                    layout: {
+                        padding: 10
+                    },
+                    parsing: {
+                        xAxisKey: 'day',
+                        yAxisKey: 'numLogs'
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: "Aggregated Log Count by Day during: " + selectedMonth + "/" + selectedYear,
+                            align: 'start',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                title: function (context) {
+                                    return selectedMonth + "/" + context[0].label + "/" + selectedYear;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Day'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Total Logs',
+                                padding: 20
+                            }
+                        }
+                    }
+                }
+            })
+        }
+
+
+
+        // Logs by Day Chart Constructor
+        function yearQuery(response)
+        {
+            selectedYear = document.getElementById("yearSelected").value;
+
+            console.log("Begin Month Query");
+
+            // Filter "BEEG JSON"" into "smol JSON"" According to Filters
+            filtered = response.filter(function (d)
+                {
+                    return d.year == selectedYear;
+                }
+            );
+
+            // Rollup Hours into Sum of Logs per Day - THIS IS A 2D ARRAY OUTPUT!
+            rolld = d3.flatRollup(filtered, v => d3.sum(v, d => d.numberOfLogs), d => d.month);
+            console.log(rolld);
+
+            // Pull Labels from rolld
+            var labels = rolld.map(function(d) {
+                return d[0];
+            });
+            // Pull Logs from rolld
+            var data = rolld.map(function(d) {
+                return d[1];
+            });
+
+
+            //create chart
+            const ctx = document.getElementById('chartCanvas');
+            logsChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Total Logs',
+                            data: data,
+                            backgroundColor: "darkgreen",
+                            borderColor: "lightgrey",
+                            borderWidth: 1
+                        }
+                    ],
+                },
+                options: {
+                    responsive: true,
+                    layout: {
+                        padding: 10
+                    },
+                    parsing: {
+                        xAxisKey: 'day',
+                        yAxisKey: 'numLogs'
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: "Aggregated Log Count by Month during: " + selectedYear,
+                            align: 'start',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                title: function (context) {
+                                    return context[0].label + "/" + selectedYear;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Month'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Total Logs',
+                                padding: 20
+                            }
+                        }
+                    }
+                }
+            })
+        }
+
+    </script>
+    }

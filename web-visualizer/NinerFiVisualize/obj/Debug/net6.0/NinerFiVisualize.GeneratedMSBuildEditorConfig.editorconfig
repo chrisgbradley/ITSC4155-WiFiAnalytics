@@ -1,0 +1,56 @@
+is_global = true
+build_property.TargetFramework = net6.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = NinerFiVisualize
+build_property.RootNamespace = NinerFiVisualize
+build_property.ProjectDir = C:\Users\spencers\Desktop\ITSC4155-WiFiAnalytics-webbackendoverhaul\NinerFiVisualize\
+build_property.RazorLangVersion = 6.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = C:\Users\spencers\Desktop\ITSC4155-WiFiAnalytics-webbackendoverhaul\NinerFiVisualize
+build_property._RazorSourceGeneratorDebug = 
+
+[C:/Users/spencers/Desktop/ITSC4155-WiFiAnalytics-webbackendoverhaul/NinerFiVisualize/Pages/Charts/ErrorTracking.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ2hhcnRzXEVycm9yVHJhY2tpbmcuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/spencers/Desktop/ITSC4155-WiFiAnalytics-webbackendoverhaul/NinerFiVisualize/Pages/Charts/LogCount.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ2hhcnRzXExvZ0NvdW50LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/spencers/Desktop/ITSC4155-WiFiAnalytics-webbackendoverhaul/NinerFiVisualize/Pages/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3IuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/spencers/Desktop/ITSC4155-WiFiAnalytics-webbackendoverhaul/NinerFiVisualize/Pages/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/spencers/Desktop/ITSC4155-WiFiAnalytics-webbackendoverhaul/NinerFiVisualize/Pages/Privacy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJpdmFjeS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/spencers/Desktop/ITSC4155-WiFiAnalytics-webbackendoverhaul/NinerFiVisualize/Pages/Shared/_ChartsLayout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9DaGFydHNMYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/spencers/Desktop/ITSC4155-WiFiAnalytics-webbackendoverhaul/NinerFiVisualize/Pages/Shared/_ValidationScriptsPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/spencers/Desktop/ITSC4155-WiFiAnalytics-webbackendoverhaul/NinerFiVisualize/Pages/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/spencers/Desktop/ITSC4155-WiFiAnalytics-webbackendoverhaul/NinerFiVisualize/Pages/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/spencers/Desktop/ITSC4155-WiFiAnalytics-webbackendoverhaul/NinerFiVisualize/Pages/Shared/_MainLayout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9NYWluTGF5b3V0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = b-4dtd0ya2r1

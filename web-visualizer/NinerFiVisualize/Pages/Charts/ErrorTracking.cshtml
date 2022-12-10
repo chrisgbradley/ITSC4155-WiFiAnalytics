@@ -1,0 +1,235 @@
+﻿@page "{handler?}"
+@model NinerFiVisualize.Pages.Charts.ErrorTrackingModel
+@{
+    Layout = "../Shared/_ChartsLayout.cshtml";
+    ViewData["Title"] = "Error Tracking";
+}
+
+<div class="pageContent">
+    <h2>Error Tracking</h2>
+
+    <h3>By Error Type Name:</h3>
+    <button class="errorButton" value="NOTI" onclick="notiSelected()">NOTI</button>
+    <button class="errorButton" value="WARN" onclick="warnSelected()">WARN</button>
+    <button class="errorButton" value="ERRS" onclick="errsSelected()">ERRS</button>
+
+    <canvas id="errorChart" aria-label="Error Tracking Chart" role="img"></canvas>
+</div>
+
+@section Scripts
+    {
+    <script type="application/javascript">
+
+        $(document).ready(function () {
+            $.ajax({
+                url: '/api/charts/get-error-tracking',
+                type: 'GET',
+                contentType: "application/json; charset=utf-8",
+                dataType: 'json',
+                success: (data) => {
+                    responseJSON = data;
+                    initializeChart(data);
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert(xhr.status);
+                    alert(thrownError);
+                }
+            });
+        })
+
+        function getData(errName, radius) {
+            //get data from selected year
+            const filtered = responseJSON.filter(d => d.typeName == errName);
+
+            //sum total log entries for each day and month and error type
+            const summed = d3.flatRollup(filtered, v => d3.sum(v, d => d.logEntries), d => d.month, d => d.day);
+
+            //map x, y, and r values to fit bubble chart.js format
+            const mapData = (arr) => arr.map(d => {
+                return {
+                        x: d[0],
+                        y: d[1],
+                        r: d[2] / radius //r is the pixel size, which doesn't scale with the chart size - dividing to make r fit in the chart
+                       }
+             });
+
+             return mapData(summed);
+        }
+
+        //select canvas for charts
+        const ctx = document.getElementById('errorChart').getContext('2d');
+
+        //create chart after page loads
+        function initializeChart(response) {
+            //create chart
+            errorChart = new Chart(ctx, {
+                type: 'bubble',
+                data: {
+                    datasets: [{
+                            label: "NOTI",
+                            data: getData("NOTI ", 70000),
+                            backgroundColor: 'rgba(0, 255, 144, 0.5)',
+                            borderColor: 'rgba(0, 204, 116, 1)'
+                        }]
+                        },
+                options: {
+                    aspectRatio: 1,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: "Log Count by Error Type Name for: NOTI",
+                            align: 'start',
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Month'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Day',
+                                padding: 20
+                            }
+                        }
+                    }
+                }
+            })
+        }
+
+        //on button click create NOTI error name chart
+        function notiSelected()
+        {
+            errorChart.destroy();
+
+            //create chart
+            errorChart = new Chart(ctx, {
+                type: 'bubble',
+                data: {
+                    datasets: [{
+                            label: "NOTI",
+                            data: getData("NOTI ", 70000),
+                            backgroundColor: 'rgba(0, 255, 144, 0.5)',
+                            borderColor: 'rgba(0, 204, 116, 1)'
+                        }]
+                        },
+                options: {
+                    aspectRatio: 1,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: "Log Count by Error Type Name for: NOTI",
+                            align: 'start',
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Month'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Day',
+                                padding: 20
+                            }
+                        }
+                    }
+                }
+            })
+        }
+
+        //on button click create WARN error name chart
+        function warnSelected()
+        {
+            errorChart.destroy();
+
+            //create chart
+            errorChart = new Chart(ctx, {
+                type: 'bubble',
+                data: {
+                    datasets: [{
+                            label: "WARN",
+                            data: getData("WARN ", 500),
+                            backgroundColor: 'rgba(230, 114, 0, 0.5)',
+                            borderColor: 'rgba(252, 92, 13, 1)'
+                        }]
+                        },
+                options: {
+                    aspectRatio: 1,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: "Log Count by Error Type Name for: WARN",
+                            align: 'start',
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Month'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Day',
+                                padding: 20
+                            }
+                        }
+                    }
+                }
+            })
+        }
+
+        //on button click create ERRS error name chart
+        function errsSelected()
+        {
+            errorChart.destroy();
+
+            //create chart
+            errorChart = new Chart(ctx, {
+                type: 'bubble',
+                data: {
+                    datasets: [{
+                            label: "ERRS",
+                            data: getData("ERRS ", 500),
+                            backgroundColor: 'rgba(255, 17, 0, 0.5)',
+                            borderColor: 'rgba(204, 13, 0, 1)'
+                        }]
+                        },
+                options: {
+                    aspectRatio: 1,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: "Log Count by Error Type Name for: ERRS",
+                            align: 'start',
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Month'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Day',
+                                padding: 20
+                            }
+                        }
+                    }
+                }
+            })
+        }
+    </script>
+    }

@@ -1,0 +1,48 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Project Overview";
+}
+
+<div class="hero sticky-hero">
+    <div class="hero-image"></div>
+</div>
+
+<section class="project-overview">
+    <embed class="line-accent" src="/images/line-accent.svg" />
+    <div class="content-wrapper">
+        <div class="po-content-title">
+            <h1>Project Overview</h1>
+            <h2>NinerFi Analytics</h2>
+        </div>
+        <div class="abstract-wrapper">
+            <div class="po-content-abstract">
+
+                <h3>
+                    A student capstone project creating visualizations of log data from the campus WiFi access points.
+                </h3>
+                <p>
+                    Over two years of log entries from the university's WiFi access points has been generated and archived. For this
+                    project, we were provided one year of data, September 2020 through August 2021, inclusive. Our goal is to provide
+                    students and staff an easy method to examine these logs on a scale of hundreds of gigabytes at a time. To accomplish
+                    this, we developed a method to upload selected log files to a database, a database for storing the data and to act as
+                    a powerful interface for querying, and finally, a web interface to display and interact with the data.
+                </p>
+            </div>
+        </div>
+        <div class="po-content-techstack">
+            <h3>The Stack</h3>
+            <ul class="stacklist">
+                <li>C#/.NET6.0</li>
+                <li>SQL Server 2019</li>
+                <li>ASP.NET Core 6</li>
+                <li>ChartJS</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script src="~/js/projectoverview.js"></script>
+}
+
